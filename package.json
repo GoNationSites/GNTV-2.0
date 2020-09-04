@@ -49,5 +49,10 @@
   },
   "files": [
     "dist"
-  ]
+  ],
+  "dependencies": {
+    "axios-jsonp": "^1.0.4",
+    "react-responsive-carousel": "^3.2.9",
+    "slugify": "^1.4.5"
+  }
 }
