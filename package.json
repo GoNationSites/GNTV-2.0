@@ -53,6 +53,7 @@
   "dependencies": {
     "axios-jsonp": "^1.0.4",
     "react-responsive-carousel": "^3.2.9",
-    "slugify": "^1.4.5"
+    "slugify": "^1.4.5",
+    "styled-components": "^5.2.0"
   }
 }
