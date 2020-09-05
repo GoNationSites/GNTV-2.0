@@ -64,6 +64,7 @@ export const TV = ({ gonationID, plID = '1' }) => {
   return (
     <div>
       <Carousel {...configuration}>
+        {/* todo there is a bug where the autoplay functionality does not work unless you have the allItems.length > 3 check */}
         {!loading.menu && allItems.length > 3 ? displayTV() : ''}
       </Carousel>
     </div>
