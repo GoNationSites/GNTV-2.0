@@ -64,7 +64,7 @@ export const TV = ({ gonationID, plID = '1' }) => {
   return (
     <div>
       <Carousel {...configuration}>
-        {!loading.menu && allItems.length > 5 ? displayTV() : ''}
+        {!loading.menu && allItems.length > 3 ? displayTV() : ''}
       </Carousel>
     </div>
   )
