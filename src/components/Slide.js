@@ -4,6 +4,7 @@ import styled from 'styled-components'
 import cloudinaryOptimize from '../helpers/cloudinaryOptimize'
 import ContentBlock from '../components/contentBlock'
 import FlyerModeEvent from '../components/flyerModeEvent'
+import ShoutSlide from './ShoutSlide'
 
 const Slide = ({ data }) => {
   const determineLeftOrRight = () =>
@@ -11,6 +12,8 @@ const Slide = ({ data }) => {
 
   if (data.starts) {
     return <FlyerModeEvent data={data} />
+  } else if (data.text) {
+    return <ShoutSlide data={data} />
   } else {
     return (
       <SlideContainer bg={data.imageUrl}>

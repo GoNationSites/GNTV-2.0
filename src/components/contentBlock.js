@@ -4,7 +4,7 @@ import dayjs from 'dayjs'
 
 import formatEventDays from '../helpers/formatEventDays'
 
-const ContentBlock = ({ item, isEvent }) => {
+const ContentBlock = ({ item, isEvent, isShout, isDefault }) => {
   const price =
     item.variants && item.variants.length ? item.variants[0].price : 0
   // todo: render price variants. ATM we only render the first price inside of the variants array
@@ -23,12 +23,31 @@ const ContentBlock = ({ item, isEvent }) => {
       <React.Fragment>
         <p>
           <span>Starts:</span>{' '}
-          {dayjs(item.starts).format('dddd, MMMM DD hh:mm A')}{' '}
+          {dayjs(item.starts).format('dddd, MMMM D h:mm A')}{' '}
         </p>
         <p>
-          <span>Ends:</span> {dayjs(item.ends).format('dddd, MMMM DD hh:mm A')}
+          <span>Ends:</span> {dayjs(item.ends).format('dddd, MMMM D hh:mm A')}
         </p>
       </React.Fragment>
+    )
+  }
+
+  const renderShoutedAt = () => {
+    return (
+      <p>
+        <span>Shouted </span>
+        {dayjs(item.starts).format('dddd, MMMM D h:mm A')}
+      </p>
+    )
+  }
+
+  if (isShout) {
+    return (
+      <Block pushRight={!isDefault ? false : true}>
+        <Title>Recent Shout</Title>
+        <Description>{item.text}</Description>
+        <EventTime>{renderShoutedAt()}</EventTime>
+      </Block>
     )
   }
   if (isEvent) {
@@ -57,6 +76,7 @@ const Block = styled.div`
   max-width: 600px;
   border-radius: 3px;
   margin-left: ${({ pushRight }) => (pushRight ? 'auto' : '')};
+  margin: ${({ pushRight }) => (!pushRight ? 'auto' : '')};
 `
 
 const Title = styled.h1`
