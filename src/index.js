@@ -8,11 +8,19 @@ import { getData } from './api/request'
 import Slide from './components/Slide'
 
 export const TV = ({ gonationID, plID = '1' }) => {
+  // todo: convert allItems and menuLoading to be it's own piece of state
   const [allItems, setAllItems] = useState([])
-  const [loading, setLoading] = useState({
-    menu: true
+  const [menuLoading, setMenuLoading] = useState(true)
+  const [regularEvents, setRegularEvents] = useState({
+    loading: true,
+    regularEvents: []
+  })
+  const [recurringEvents, setRecurringEvents] = useState({
+    loading: true,
+    recurringEvents: []
   })
 
+  // todo: these Carousel options should be coming from GN endpoints
   const configuration = {
     showArrows: false,
     showStatus: false,
@@ -26,20 +34,59 @@ export const TV = ({ gonationID, plID = '1' }) => {
   }
 
   useEffect(() => {
-    const url = `https://data.prod.gonation.com/pl/get?profile_id=${gonationID}&powerlistId=powered-list-${plID}`
+    const menuURL = `https://data.prod.gonation.com/pl/get?profile_id=${gonationID}&powerlistId=powered-list-${plID}`
+    const eventsURL = `https://data.prod.gonation.com/profile/events?profile_id=${gonationID}`
+    const recurringEventsURL = `https://data.prod.gonation.com/profile/recurringevents?profile_id=${gonationID}`
 
+    // todo: refactor the separate requests into 1 Promise.All
+
+    // fetch Regular events and set it to state
     getData(
-      url,
-      (res) => {
-        setLoading({
-          menu: false
+      eventsURL,
+      ({ data }) => {
+        setRegularEvents(data.events)
+        setRegularEvents({
+          regularEvents: data.events,
+          loading: false
         })
-        flattenItems(res.data[0])
       },
       (e) => {
-        setLoading({
-          menu: false
+        setRegularEvents({
+          loading: false,
+          regularEvents: []
         })
+        console.log('error occurred: ', e)
+      }
+    )
+
+    // fetch recurring events and set it to state
+    getData(
+      recurringEventsURL,
+      ({ data }) => {
+        setRecurringEvents({
+          loading: false,
+          recurringEvents: data.events
+        })
+      },
+      (e) => {
+        setRecurringEvents({
+          loading: false,
+          recurringEvents: []
+        })
+        console.log('error occurred: ', e)
+      }
+    )
+
+    // fetch menu data, and run the flattenItems function
+    getData(
+      menuURL,
+      (res) => {
+        flattenItems(res.data[0])
+        setMenuLoading(false)
+      },
+      (e) => {
+        setAllItems([])
+        setMenuLoading(false)
         console.log('error occurred: ', e)
       }
     )
@@ -61,11 +108,13 @@ export const TV = ({ gonationID, plID = '1' }) => {
       .filter((itm) => !itm.imagePrefix.includes('default'))
       .map((item) => <Slide key={item.item_id} data={item} />)
 
+  const fetchingData = () =>
+    menuLoading && recurringEvents.loading && regularEvents.loading
+  // todo there is a bug where the autoplay functionality does not work unless you have the allItems.length > 3 check
   return (
     <div>
       <Carousel {...configuration}>
-        {/* todo there is a bug where the autoplay functionality does not work unless you have the allItems.length > 3 check */}
-        {!loading.menu && allItems.length > 3 ? displayTV() : ''}
+        {!fetchingData() && allItems.length > 3 ? displayTV() : ''}
       </Carousel>
     </div>
   )
