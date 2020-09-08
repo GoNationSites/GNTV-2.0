@@ -3,18 +3,23 @@ import styled from 'styled-components'
 
 import cloudinaryOptimize from '../helpers/cloudinaryOptimize'
 import ContentBlock from '../components/contentBlock'
+import FlyerModeEvent from '../components/flyerModeEvent'
 
 const Slide = ({ data }) => {
   const determineLeftOrRight = () =>
     Math.random() < 0.5 ? 'flex-start' : 'flex-end'
 
-  return (
-    <SlideContainer bg={data.imageUrl}>
-      <ContentBlockWrapper justifyPosition={determineLeftOrRight()}>
-        <ContentBlock item={data} />
-      </ContentBlockWrapper>
-    </SlideContainer>
-  )
+  if (data.starts) {
+    return <FlyerModeEvent data={data} />
+  } else {
+    return (
+      <SlideContainer bg={data.imageUrl}>
+        <ContentBlockWrapper justifyPosition={determineLeftOrRight()}>
+          <ContentBlock item={data} />
+        </ContentBlockWrapper>
+      </SlideContainer>
+    )
+  }
 }
 
 export default Slide
