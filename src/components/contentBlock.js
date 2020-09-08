@@ -43,7 +43,7 @@ const ContentBlock = ({ item, isEvent, isShout, isDefault }) => {
 
   if (isShout) {
     return (
-      <Block pushRight={!isDefault ? false : true}>
+      <Block isDefault={isDefault} pushRight={isDefault ? false : true}>
         <Title>Recent Shout</Title>
         <Description>{item.text}</Description>
         <EventTime>{renderShoutedAt()}</EventTime>
@@ -73,10 +73,13 @@ const Block = styled.div`
   padding: 2rem;
   background: rgba(0, 0, 0, 0.8);
   color: white;
+  min-width: 500px;
   max-width: 600px;
   border-radius: 3px;
+
+  margin: ${({ pushRight, isDefault }) =>
+    !pushRight && isDefault ? 'auto' : ''};
   margin-left: ${({ pushRight }) => (pushRight ? 'auto' : '')};
-  margin: ${({ pushRight }) => (!pushRight ? 'auto' : '')};
 `
 
 const Title = styled.h1`

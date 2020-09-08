@@ -36,7 +36,8 @@ export const TV = ({ gonationID, plID = '1', texture }) => {
     interval: 5000,
     transitionTime: 0,
     infiniteLoop: true,
-    stopOnHover: false
+    stopOnHover: false,
+    showThumbs: false
   }
 
   useEffect(() => {
@@ -177,16 +178,44 @@ export const TV = ({ gonationID, plID = '1', texture }) => {
   // todo there is a bug where the autoplay functionality does not work unless you have the allItems.length > 3 check
   return (
     <TVContext.Provider value={texture}>
-      <div>
+      <CarouselContainer>
         <Carousel {...configuration}>
           {!fetchingData() && allItems.length > 3
             ? displayTV()
             : renderLoading()}
         </Carousel>
-      </div>
+        <PoweredByContainer>
+          <img
+            src='https://www.gonationsites.com/GNSE/gn-sites/images/gn-power-white.svg'
+            alt='GoNation'
+          />
+        </PoweredByContainer>
+      </CarouselContainer>
     </TVContext.Provider>
   )
 }
+
+const CarouselContainer = styled.div`
+  position: relative;
+`
+
+const PoweredByContainer = styled.div`
+  position: absolute;
+  width: 100%;
+  bottom: 0;
+  left: 0;
+  display: flex;
+  justify-content: center;
+
+  img {
+    max-width: 600px;
+    margin: auto;
+    padding: 1rem 1rem 0.5rem 1rem;
+    background: rgba(0, 0, 0, 0.5);
+    border-top-left-radius: 6px;
+    border-top-right-radius: 6px;
+  }
+`
 
 const SlideWrapper = styled.div`
   display: flex;
