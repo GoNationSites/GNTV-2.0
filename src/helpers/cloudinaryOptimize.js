@@ -1,5 +1,4 @@
 export default function (img, width = '600') {
-  console.log('img: ', img)
   if (!img) {
     return ''
   }

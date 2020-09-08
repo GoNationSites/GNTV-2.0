@@ -21,6 +21,10 @@ export const TV = ({ gonationID, plID = '1', texture }) => {
     loading: true,
     recurringEvents: []
   })
+  const [shout, setShout] = useState({
+    loading: true,
+    shoutData: {}
+  })
 
   // todo: these Carousel options should be coming from GN endpoints
   const configuration = {
@@ -39,14 +43,32 @@ export const TV = ({ gonationID, plID = '1', texture }) => {
     const menuURL = `https://data.prod.gonation.com/pl/get?profile_id=${gonationID}&powerlistId=powered-list-${plID}`
     const eventsURL = `https://data.prod.gonation.com/profile/events?profile_id=${gonationID}`
     const recurringEventsURL = `https://data.prod.gonation.com/profile/recurringevents?profile_id=${gonationID}`
+    const shoutURL = `https://data.prod.gonation.com/profile/shoutsnew/${gonationID}`
 
     // todo: refactor the separate requests into 1 Promise.All
 
     // fetch Regular events and set it to state
     getData(
+      shoutURL,
+      ({ data }) => {
+        setShout({
+          loading: false
+        })
+        injectShout(data.shout)
+      },
+      (e) => {
+        setShout({
+          loading: false,
+          shoutData: {}
+        })
+        console.log('error occurred: ', e)
+      }
+    )
+
+    // fetch Regular events and set it to state
+    getData(
       eventsURL,
       ({ data }) => {
-        setRegularEvents(data.events)
         setRegularEvents({
           regularEvents: data.events,
           loading: false
@@ -100,8 +122,11 @@ export const TV = ({ gonationID, plID = '1', texture }) => {
     }
   }, [regularEvents.regularEvents, recurringEvents.recurringEvents])
 
+  const injectShout = (shout) => {
+    setAllItems((allItems) => [...allItems, shout])
+  }
+
   const createEventsCollection = () => {
-    console.log(regularEvents.regularEvents, recurringEvents.recurringEvents)
     const allEvents = regularEvents.regularEvents.concat(
       recurringEvents.recurringEvents
     )
@@ -119,17 +144,29 @@ export const TV = ({ gonationID, plID = '1', texture }) => {
     setAllItems((allItems) => [...allItems, ...items])
   }
 
+  const filterFunction = (itm) => {
+    if (itm.text) {
+      return itm
+    }
+    if (itm.starts) {
+      return itm
+    } else if (!itm.imagePrefix.includes('default')) {
+      return itm
+    }
+  }
+
   const displayTV = () =>
     allItems
-      .filter((itm) =>
-        !itm.starts ? !itm.imagePrefix.includes('default') : itm
-      )
+      .filter((itm) => filterFunction(itm))
       .map((item) => (
         <Slide key={item._id ? item._id : item.item_id} data={item} />
       ))
 
   const fetchingData = () =>
-    menuLoading && recurringEvents.loading && regularEvents.loading
+    menuLoading &&
+    recurringEvents.loading &&
+    regularEvents.loading &&
+    shout.loading
 
   const renderLoading = () => (
     <SlideWrapper>
