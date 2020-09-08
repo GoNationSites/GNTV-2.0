@@ -1,4 +1,8 @@
 export default function (img, width = '600') {
+  console.log('img: ', img)
+  if (!img) {
+    return ''
+  }
   const optimizeStr = `w_${width}/q_auto/f_auto/`
   if (img.includes('upload/')) {
     return img.replace('upload/', `upload/${optimizeStr}`)

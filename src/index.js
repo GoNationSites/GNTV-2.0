@@ -7,7 +7,9 @@ import splitSectionChildren from './helpers/splitSectionChildren'
 import { getData } from './api/request'
 import Slide from './components/Slide'
 
-export const TV = ({ gonationID, plID = '1' }) => {
+import TVContext from './TVContext'
+
+export const TV = ({ gonationID, plID = '1', texture }) => {
   // todo: convert allItems and menuLoading to be it's own piece of state
   const [allItems, setAllItems] = useState([])
   const [menuLoading, setMenuLoading] = useState(true)
@@ -26,7 +28,7 @@ export const TV = ({ gonationID, plID = '1' }) => {
     showStatus: false,
     showIndicators: false,
     useKeyboardArrows: true,
-    autoPlay: true,
+    autoPlay: false,
     interval: 5000,
     transitionTime: 0,
     infiniteLoop: true,
@@ -92,6 +94,20 @@ export const TV = ({ gonationID, plID = '1' }) => {
     )
   }, [])
 
+  useEffect(() => {
+    if (!regularEvents.loading && !recurringEvents.loading) {
+      createEventsCollection()
+    }
+  }, [regularEvents.regularEvents, recurringEvents.recurringEvents])
+
+  const createEventsCollection = () => {
+    console.log(regularEvents.regularEvents, recurringEvents.recurringEvents)
+    const allEvents = regularEvents.regularEvents.concat(
+      recurringEvents.recurringEvents
+    )
+    setAllItems((allItems) => [...allItems, ...allEvents])
+  }
+
   const flattenItems = (data, nested, idx) => {
     const items = data.inventory
       .filter((itm) => itm.item)
@@ -105,19 +121,47 @@ export const TV = ({ gonationID, plID = '1' }) => {
 
   const displayTV = () =>
     allItems
-      .filter((itm) => !itm.imagePrefix.includes('default'))
-      .map((item) => <Slide key={item.item_id} data={item} />)
+      .filter((itm) =>
+        !itm.starts ? !itm.imagePrefix.includes('default') : itm
+      )
+      .map((item) => (
+        <Slide key={item._id ? item._id : item.item_id} data={item} />
+      ))
 
   const fetchingData = () =>
     menuLoading && recurringEvents.loading && regularEvents.loading
+
+  const renderLoading = () => (
+    <SlideWrapper>
+      <h1>Loading GoNation Content...</h1>
+    </SlideWrapper>
+  )
+
   // todo there is a bug where the autoplay functionality does not work unless you have the allItems.length > 3 check
   return (
-    <div>
-      <Carousel {...configuration}>
-        {!fetchingData() && allItems.length > 3 ? displayTV() : ''}
-      </Carousel>
-    </div>
+    <TVContext.Provider value={texture}>
+      <div>
+        <Carousel {...configuration}>
+          {!fetchingData() && allItems.length > 3
+            ? displayTV()
+            : renderLoading()}
+        </Carousel>
+      </div>
+    </TVContext.Provider>
   )
 }
 
-const SlideWrapper = styled.div``
+const SlideWrapper = styled.div`
+  display: flex;
+  height: 100vh;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+
+  background: #20bed6;
+  transition: all 0.75s;
+  h1 {
+    color: white;
+    font-size: 3rem;
+  }
+`

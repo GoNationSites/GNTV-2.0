@@ -1,10 +1,45 @@
 import React from 'react'
 import styled from 'styled-components'
+import dayjs from 'dayjs'
 
-const ContentBlock = ({ item }) => {
-  const price = item.variants.length ? item.variants[0].price : 0
+import formatEventDays from '../helpers/formatEventDays'
+
+const ContentBlock = ({ item, isEvent }) => {
+  const price =
+    item.variants && item.variants.length ? item.variants[0].price : 0
   // todo: render price variants. ATM we only render the first price inside of the variants array
   const renderPrice = () => (price ? price : '')
+  const renderEventTime = () => {
+    if (item.eventDays) {
+      const eventDays = Object.keys(item.eventDays)
+      return (
+        <p>
+          <span>Happening Every {formatEventDays(eventDays)}</span> at{' '}
+          {dayjs(item.starts).format('h:mm a')}
+        </p>
+      )
+    }
+    return (
+      <React.Fragment>
+        <p>
+          <span>Starts:</span>{' '}
+          {dayjs(item.starts).format('dddd, MMMM DD hh:mm A')}{' '}
+        </p>
+        <p>
+          <span>Ends:</span> {dayjs(item.ends).format('dddd, MMMM DD hh:mm A')}
+        </p>
+      </React.Fragment>
+    )
+  }
+  if (isEvent) {
+    return (
+      <Block pushRight>
+        <Title>{item.name}</Title>
+        <Description>{item.description}</Description>
+        <EventTime>{renderEventTime()}</EventTime>
+      </Block>
+    )
+  }
   return (
     <Block>
       <Title>{item.name}</Title>
@@ -21,6 +56,7 @@ const Block = styled.div`
   color: white;
   max-width: 600px;
   border-radius: 3px;
+  margin-left: ${({ pushRight }) => (pushRight ? 'auto' : '')};
 `
 
 const Title = styled.h1`
@@ -38,4 +74,11 @@ const Description = styled.p`
 const Price = styled.p`
   font-size: 1.25rem;
   text-align: left;
+`
+
+const EventTime = styled.div`
+  text-align: left;
+  span {
+    font-weight: bold;
+  }
 `
