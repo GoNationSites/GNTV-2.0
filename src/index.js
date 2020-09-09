@@ -9,7 +9,7 @@ import Slide from './components/Slide'
 
 import TVContext from './TVContext'
 
-export const TV = ({ gonationID, plID = '1', texture }) => {
+export const TV = ({ gonationID, plID = '1', texture, tvID }) => {
   // todo: convert allItems and menuLoading to be it's own piece of state
   const [allItems, setAllItems] = useState([])
   const [menuLoading, setMenuLoading] = useState(true)
@@ -25,9 +25,7 @@ export const TV = ({ gonationID, plID = '1', texture }) => {
     loading: true,
     shoutData: {}
   })
-
-  // todo: these Carousel options should be coming from GN endpoints
-  const configuration = {
+  const [configuration, setConfiguration] = useState({
     showArrows: false,
     showStatus: false,
     showIndicators: false,
@@ -38,17 +36,29 @@ export const TV = ({ gonationID, plID = '1', texture }) => {
     infiniteLoop: true,
     stopOnHover: false,
     showThumbs: false
-  }
+  })
 
   useEffect(() => {
     const menuURL = `https://data.prod.gonation.com/pl/get?profile_id=${gonationID}&powerlistId=powered-list-${plID}`
     const eventsURL = `https://data.prod.gonation.com/profile/events?profile_id=${gonationID}`
     const recurringEventsURL = `https://data.prod.gonation.com/profile/recurringevents?profile_id=${gonationID}`
     const shoutURL = `https://data.prod.gonation.com/profile/shoutsnew/${gonationID}`
+    const configurationURL = `https://data.prod.gonation.com/profile/gntv/${tvID}?profile_id=${gonationID}`
 
     // todo: refactor the separate requests into 1 Promise.All
 
-    // fetch Regular events and set it to state
+    // fetch TV configuration settings
+    getData(
+      configurationURL,
+      (res) => {
+        console.log('config res: ', res)
+      },
+      (e) => {
+        console.log('error occurred: ', e)
+      }
+    )
+
+    // fetch shout and set it to state
     getData(
       shoutURL,
       ({ data }) => {
