@@ -6,11 +6,11 @@ import cloudinaryOptimize from '../helpers/cloudinaryOptimize'
 import ContentBlock from './contentBlock'
 
 const ShoutSlide = ({ data }) => {
-  const texture = useContext(TVContext)
+  const ctx = useContext(TVContext)
   const isDefaultImage = data.image.isDefault
   const imageURL = `https://res.cloudinary.com/gonation/${data.image.image.cloudinaryId}`
   return (
-    <SlideContainer bg={texture}>
+    <SlideContainer bg={ctx.texture}>
       <Columns>
         {!isDefaultImage ? (
           <Box width={'33%'}>

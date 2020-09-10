@@ -5,8 +5,6 @@ import dayjs from 'dayjs'
 
 const ShoutTicker = ({ data }) => {
   const { createdAt, image, text } = data
-  console.log(text)
-
   return (
     <div>
       <Ticker mode='await'>

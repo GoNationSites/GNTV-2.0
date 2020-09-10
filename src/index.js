@@ -3,6 +3,10 @@ import { Carousel } from 'react-responsive-carousel'
 import 'react-responsive-carousel/lib/styles/carousel.min.css'
 import styled from 'styled-components'
 
+// todo remove this
+import axios from 'axios-jsonp'
+import jsonAdapter from 'axios-jsonp'
+
 import splitSectionChildren from './helpers/splitSectionChildren'
 import { getData } from './api/request'
 import Slide from './components/Slide'
@@ -26,37 +30,37 @@ export const TV = ({ gonationID, plID = '1', texture, tvID }) => {
     loading: true,
     shoutData: {}
   })
-  const [configuration, setConfiguration] = useState({
-    showArrows: false,
-    showStatus: false,
-    showIndicators: false,
-    useKeyboardArrows: true,
-    autoPlay: false,
-    interval: 5000,
-    transitionTime: 0,
-    infiniteLoop: true,
-    stopOnHover: false,
-    showThumbs: false
+  const [showShoutTrigger, setShoutTrigger] = useState(true)
+  const [config, setConfig] = useState({
+    loading: true,
+    config: {}
   })
-  const [showShoutTrigger, setShoutTrigger] = useState(false)
+
+  const baseURL = 'https://data.prod.gonation.com'
 
   useEffect(() => {
-    const menuURL = `https://data.prod.gonation.com/pl/get?profile_id=${gonationID}&powerlistId=powered-list-${plID}`
-    const eventsURL = `https://data.prod.gonation.com/profile/events?profile_id=${gonationID}`
-    const recurringEventsURL = `https://data.prod.gonation.com/profile/recurringevents?profile_id=${gonationID}`
-    const shoutURL = `https://data.prod.gonation.com/profile/shoutsnew/${gonationID}`
-    const configurationURL = `https://data.prod.gonation.com/profile/gntv/${tvID}?profile_id=${gonationID}`
+    const menuURL = `${baseURL}/pl/get?profile_id=${gonationID}&powerlistId=powered-list-${plID}`
+    const eventsURL = `${baseURL}/profile/events?profile_id=${gonationID}`
+    const recurringEventsURL = `${baseURL}/profile/recurringevents?profile_id=${gonationID}`
+    const shoutURL = `${baseURL}/profile/shoutsnew/${gonationID}`
+    const configurationURL = `${baseURL}/profile/gntv/${tvID}?profile_id=${gonationID}`
 
     // todo: refactor the separate requests into 1 Promise.All
 
     // fetch TV configuration settings
     getData(
       configurationURL,
-      (res) => {
-        console.log('config res: ', res)
+      ({ data }) => {
+        setConfig({
+          loading: false,
+          config: data
+        })
       },
       (e) => {
-        console.log('error occurred: ', e)
+        setConfig({
+          loading: false,
+          config: false
+        })
       }
     )
 
@@ -136,6 +140,36 @@ export const TV = ({ gonationID, plID = '1', texture, tvID }) => {
     }
   }, [regularEvents.regularEvents, recurringEvents.recurringEvents])
 
+  useEffect(() => {
+    const configurationURL = `${baseURL}/profile/gntv/${tvID}?profile_id=${gonationID}`
+    function getAlerts() {
+      getData(
+        configurationURL,
+        ({ data }) => {
+          const lastUpdatedConfig = data.lastUpdatedAt
+          if (lastUpdatedConfig !== config.config.lastUpdatedAt) {
+            setConfig({
+              loading: false,
+              config: data
+            })
+          }
+        },
+        (e) => {
+          console.log(e, 'error occurred when fetching config')
+        }
+      )
+    }
+    if (config.config.lastUpdatedAt) {
+      getAlerts()
+    }
+    const interval = setInterval(() => getAlerts(), 100000)
+
+    return () => {
+      clearInterval(interval)
+    }
+  }, [config])
+
+  // BEGIN FUNCTIONS
   const injectShout = (shout) => {
     setAllItems((allItems) => [...allItems, shout])
   }
@@ -169,12 +203,20 @@ export const TV = ({ gonationID, plID = '1', texture, tvID }) => {
     }
   }
 
+  const getKey = (itm) => {
+    if (itm.starts) {
+      return itm._id
+    }
+    if (itm.item_id) {
+      return itm.item_id
+    }
+    return itm.id
+  }
+
   const displayTV = () =>
     allItems
       .filter((itm) => filterFunction(itm))
-      .map((item) => (
-        <Slide key={item._id ? item._id : item.item_id} data={item} />
-      ))
+      .map((item) => <Slide key={getKey(item)} data={item} />)
 
   const fetchingData = () =>
     menuLoading &&
@@ -188,15 +230,32 @@ export const TV = ({ gonationID, plID = '1', texture, tvID }) => {
     </SlideWrapper>
   )
 
-  // todo there is a bug where the autoplay functionality does not work unless you have the allItems.length > 3 check
+  let configuration = {
+    showArrows: false,
+    showStatus: false,
+    showIndicators: false,
+    useKeyboardArrows: true,
+    autoPlay: false,
+    interval: config.config.slideDuration ? config.config.slideDuration : 5000,
+    transitionTime: 0,
+    infiniteLoop: true,
+    stopOnHover: false,
+    showThumbs: false
+  }
+
   return (
-    <TVContext.Provider value={texture}>
+    <TVContext.Provider
+      value={{
+        ...config,
+        texture
+      }}
+    >
       <CarouselContainer>
-        <Carousel {...configuration}>
-          {!fetchingData() && allItems.length > 3
-            ? displayTV()
-            : renderLoading()}
-        </Carousel>
+        {!fetchingData() && allItems.length > 1 ? (
+          <Carousel {...configuration}>{displayTV()}</Carousel>
+        ) : (
+          renderLoading()
+        )}
         <PoweredByContainer>
           <img
             src='https://www.gonationsites.com/GNSE/gn-sites/images/gn-power-white.svg'
@@ -204,7 +263,7 @@ export const TV = ({ gonationID, plID = '1', texture, tvID }) => {
           />
         </PoweredByContainer>
 
-        {shout.shoutData.text && showShoutTrigger ? (
+        {shout.shoutData.text && config.config.showTicker ? (
           <ShoutTickerWrapper>
             <ShoutTicker data={shout.shoutData} />
           </ShoutTickerWrapper>

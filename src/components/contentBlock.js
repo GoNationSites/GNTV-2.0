@@ -1,10 +1,11 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import styled from 'styled-components'
 import dayjs from 'dayjs'
-
+import TVContext from '../TVContext'
 import formatEventDays from '../helpers/formatEventDays'
 
 const ContentBlock = ({ item, isEvent, isShout, isDefault }) => {
+  const ctx = useContext(TVContext)
   const price =
     item.variants && item.variants.length ? item.variants[0].price : 0
   // todo: render price variants. ATM we only render the first price inside of the variants array
@@ -63,7 +64,7 @@ const ContentBlock = ({ item, isEvent, isShout, isDefault }) => {
     <Block>
       <Title>{item.name}</Title>
       <Description>{item.desc}</Description>
-      <Price>{renderPrice()}</Price>
+      {ctx.config.showPrices ? <Price>{renderPrice()}</Price> : ''}
     </Block>
   )
 }

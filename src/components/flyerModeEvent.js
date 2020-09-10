@@ -7,9 +7,9 @@ import ContentBlock from './contentBlock'
 import TVContext from '../TVContext'
 
 const flyerModeEvent = ({ data }) => {
-  const texture = useContext(TVContext)
+  const ctx = useContext(TVContext)
   return (
-    <SlideContainer bg={texture}>
+    <SlideContainer bg={ctx.texture}>
       <Columns>
         <Box width={'33%'}>
           <FlyerImage src={data.imageurl} />
