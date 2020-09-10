@@ -11,6 +11,7 @@ import splitSectionChildren from './helpers/splitSectionChildren'
 import { getData } from './api/request'
 import Slide from './components/Slide'
 import ShoutTicker from './components/ShoutTicker'
+import shuffle from './helpers/shuffle'
 
 import TVContext from './TVContext'
 
@@ -192,17 +193,6 @@ export const TV = ({ gonationID, plID = '1', texture, tvID }) => {
     setAllItems((allItems) => [...allItems, ...items])
   }
 
-  const filterFunction = (itm) => {
-    if (itm.text) {
-      return itm
-    }
-    if (itm.starts) {
-      return itm
-    } else if (!itm.imagePrefix.includes('default')) {
-      return itm
-    }
-  }
-
   const getKey = (itm) => {
     if (itm.starts) {
       return itm._id
@@ -213,10 +203,38 @@ export const TV = ({ gonationID, plID = '1', texture, tvID }) => {
     return itm.id
   }
 
+  const filterFunction = (itm) => {
+    const filteredInSections = config.config.activeTypes.list1
+
+    // if filteredInSections does NOT include menu, filter out all menu items
+    if (!filteredInSections.includes('items') && itm.item_id) {
+      return false
+    }
+
+    if (!filteredInSections.includes('events') && itm.starts) {
+      return false
+    }
+
+    if (!filteredInSections.includes('shout') && itm.text) {
+      return false
+    }
+
+    if (itm.text) {
+      return itm
+    }
+    if (itm.starts) {
+      return itm
+    } else if (!itm.imagePrefix.includes('default')) {
+      return itm
+    }
+  }
+
   const displayTV = () =>
-    allItems
-      .filter((itm) => filterFunction(itm))
-      .map((item) => <Slide key={getKey(item)} data={item} />)
+    shuffle(
+      allItems
+        .filter((itm) => filterFunction(itm))
+        .map((item) => <Slide key={getKey(item)} data={item} />)
+    )
 
   const fetchingData = () =>
     menuLoading &&
@@ -235,12 +253,14 @@ export const TV = ({ gonationID, plID = '1', texture, tvID }) => {
     showStatus: false,
     showIndicators: false,
     useKeyboardArrows: true,
-    autoPlay: false,
-    interval: config.config.slideDuration ? config.config.slideDuration : 5000,
+    autoPlay: true,
+    // interval: config.config.slideDuration ? config.config.slideDuration : 5000,
+    interval: 5000,
     transitionTime: 0,
     infiniteLoop: true,
     stopOnHover: false,
     showThumbs: false
+    // axis: 'vertical'
   }
 
   return (
