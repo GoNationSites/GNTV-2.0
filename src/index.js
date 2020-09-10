@@ -6,6 +6,7 @@ import styled from 'styled-components'
 import splitSectionChildren from './helpers/splitSectionChildren'
 import { getData } from './api/request'
 import Slide from './components/Slide'
+import ShoutTicker from './components/ShoutTicker'
 
 import TVContext from './TVContext'
 
@@ -37,6 +38,7 @@ export const TV = ({ gonationID, plID = '1', texture, tvID }) => {
     stopOnHover: false,
     showThumbs: false
   })
+  const [showShoutTrigger, setShoutTrigger] = useState(false)
 
   useEffect(() => {
     const menuURL = `https://data.prod.gonation.com/pl/get?profile_id=${gonationID}&powerlistId=powered-list-${plID}`
@@ -63,7 +65,8 @@ export const TV = ({ gonationID, plID = '1', texture, tvID }) => {
       shoutURL,
       ({ data }) => {
         setShout({
-          loading: false
+          loading: false,
+          shoutData: data.shout
         })
         injectShout(data.shout)
       },
@@ -200,10 +203,29 @@ export const TV = ({ gonationID, plID = '1', texture, tvID }) => {
             alt='GoNation'
           />
         </PoweredByContainer>
+
+        {shout.shoutData.text && showShoutTrigger ? (
+          <ShoutTickerWrapper>
+            <ShoutTicker data={shout.shoutData} />
+          </ShoutTickerWrapper>
+        ) : (
+          ''
+        )}
       </CarouselContainer>
     </TVContext.Provider>
   )
 }
+
+const ShoutTickerWrapper = styled.div`
+  position: absolute;
+  z-index: 10;
+  left: 0;
+  width: 100%;
+  bottom: 4rem;
+  background: rgba(0, 0, 0, 0.8);
+  padding: 0.75rem 1.5rem;
+  color: white;
+`
 
 const CarouselContainer = styled.div`
   position: relative;
