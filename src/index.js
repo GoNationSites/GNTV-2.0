@@ -184,12 +184,18 @@ export const TV = ({ gonationID, plID = '1', texture, tvID }) => {
 
   const flattenItems = (data, nested, idx) => {
     const items = data.inventory
+      .filter((el) => console.log('flattenItems -> el', el))
+
       .filter((itm) => itm.item)
       .map(({ item }) => item)
 
-    splitSectionChildren(data).childSections.map((childSection, idx) =>
-      flattenItems(childSection, true, idx)
-    )
+    splitSectionChildren(data)
+      .childSections.filter((el) => console.log('sl: ', el))
+      .map((childSection, idx) => {
+        // console.log(childSection)
+        return flattenItems(childSection, true, idx)
+      })
+
     setAllItems((allItems) => [...allItems, ...items])
   }
 
