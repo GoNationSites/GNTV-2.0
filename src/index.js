@@ -3,10 +3,6 @@ import { Carousel } from 'react-responsive-carousel'
 import 'react-responsive-carousel/lib/styles/carousel.min.css'
 import styled from 'styled-components'
 
-// todo remove this
-import axios from 'axios-jsonp'
-import jsonAdapter from 'axios-jsonp'
-
 import splitSectionChildren from './helpers/splitSectionChildren'
 import { getData } from './api/request'
 import Slide from './components/Slide'
@@ -14,6 +10,7 @@ import ShoutTicker from './components/ShoutTicker'
 import shuffle from './helpers/shuffle'
 
 import TVContext from './TVContext'
+import ListView from './components/ListView'
 
 export const TV = ({ gonationID, plID = '1', texture, tvID }) => {
   // todo: convert allItems and menuLoading to be it's own piece of state
@@ -36,6 +33,7 @@ export const TV = ({ gonationID, plID = '1', texture, tvID }) => {
     loading: true,
     config: {}
   })
+  const [rawMenuData, setRawMenuData] = useState(null)
 
   const baseURL = 'https://data.prod.gonation.com'
 
@@ -125,10 +123,11 @@ export const TV = ({ gonationID, plID = '1', texture, tvID }) => {
       menuURL,
       (res) => {
         flattenItems(res.data[0])
+        setRawMenuData(res.data[0])
+
         setMenuLoading(false)
       },
       (e) => {
-        setAllItems([])
         setMenuLoading(false)
         console.log('error occurred: ', e)
       }
@@ -185,7 +184,6 @@ export const TV = ({ gonationID, plID = '1', texture, tvID }) => {
   const flattenItems = (data, nested, idx) => {
     const items = data.inventory
       .filter((el) => console.log('flattenItems -> el', el))
-
       .filter((itm) => itm.item)
       .map(({ item }) => item)
 
@@ -211,9 +209,11 @@ export const TV = ({ gonationID, plID = '1', texture, tvID }) => {
 
   const filterFunction = (itm) => {
     const filteredInSections = config.config.activeTypes.list1
+    console.log(itm)
 
     // if filteredInSections does NOT include menu, filter out all menu items
     if (!filteredInSections.includes('items') && itm.item_id) {
+      console.log('here')
       return false
     }
 
@@ -246,7 +246,8 @@ export const TV = ({ gonationID, plID = '1', texture, tvID }) => {
     menuLoading &&
     recurringEvents.loading &&
     regularEvents.loading &&
-    shout.loading
+    shout.loading &&
+    config.loading
 
   const renderLoading = () => (
     <SlideWrapper>
@@ -269,6 +270,18 @@ export const TV = ({ gonationID, plID = '1', texture, tvID }) => {
     // axis: 'vertical'
   }
 
+  const isListMode = () =>
+    config.config.displayType && config.config.displayType.type === 'list'
+      ? true
+      : false
+
+  const decideLoadingOrList = () => {
+    if (isListMode() && rawMenuData) {
+      return <ListView data={rawMenuData} />
+    }
+    return renderLoading()
+  }
+
   return (
     <TVContext.Provider
       value={{
@@ -277,10 +290,10 @@ export const TV = ({ gonationID, plID = '1', texture, tvID }) => {
       }}
     >
       <CarouselContainer>
-        {!fetchingData() && allItems.length > 1 ? (
+        {!fetchingData() && allItems.length > 5 && !isListMode() ? (
           <Carousel {...configuration}>{displayTV()}</Carousel>
         ) : (
-          renderLoading()
+          decideLoadingOrList()
         )}
         <PoweredByContainer>
           <img

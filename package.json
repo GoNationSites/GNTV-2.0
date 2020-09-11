@@ -53,7 +53,9 @@
   "dependencies": {
     "axios-jsonp": "^1.0.4",
     "dayjs": "^1.8.35",
+    "react-marquee-line": "^1.0.1",
     "react-responsive-carousel": "^3.2.9",
+    "react-scroll": "^1.8.1",
     "react-scroll-loop": "0.0.10",
     "react-ticker": "^1.2.2",
     "slugify": "^1.4.5",
