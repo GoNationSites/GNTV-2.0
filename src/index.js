@@ -183,16 +183,13 @@ export const TV = ({ gonationID, plID = '1', texture, tvID }) => {
 
   const flattenItems = (data, nested, idx) => {
     const items = data.inventory
-      .filter((el) => console.log('flattenItems -> el', el))
       .filter((itm) => itm.item)
       .map(({ item }) => item)
 
-    splitSectionChildren(data)
-      .childSections.filter((el) => console.log('sl: ', el))
-      .map((childSection, idx) => {
-        // console.log(childSection)
-        return flattenItems(childSection, true, idx)
-      })
+    splitSectionChildren(data).childSections.map((childSection, idx) => {
+      // console.log(childSection)
+      return flattenItems(childSection, true, idx)
+    })
 
     setAllItems((allItems) => [...allItems, ...items])
   }
@@ -261,8 +258,8 @@ export const TV = ({ gonationID, plID = '1', texture, tvID }) => {
     showIndicators: false,
     useKeyboardArrows: true,
     autoPlay: true,
-    // interval: config.config.slideDuration ? config.config.slideDuration : 5000,
-    interval: 5000,
+    interval: config.config.slideDuration ? config.config.slideDuration : 5000,
+    // interval: 5000,
     transitionTime: 0,
     infiniteLoop: true,
     stopOnHover: false,

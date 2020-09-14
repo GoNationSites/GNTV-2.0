@@ -16,6 +16,19 @@ const ListView = ({ data }) => {
   const ctx = useContext(TVContext)
   const refContainer = useRef()
 
+  const defaultDuration = 400000
+  const getDuration = () => {
+    if (ctx.config.otherOptions && ctx.config.otherOptions.listViewDuration) {
+      console.log(
+        'getDuration -> ctx.config.otherOptions.listViewDuration',
+        ctx.config.otherOptions.listViewDuration
+      )
+
+      return ctx.config.otherOptions.listViewDuration
+    }
+    return defaultDuration
+  }
+
   const scrollUp = () => {
     setTimeout(() => {
       scroll.scrollToTop({
@@ -31,7 +44,7 @@ const ListView = ({ data }) => {
     setTimeout(() => {
       scroll.scrollToBottom({
         containerId: 'containerElement',
-        duration: 60000,
+        duration: getDuration(),
         smooth: 'linear',
         offSet: 9000,
         isDynamic: true
