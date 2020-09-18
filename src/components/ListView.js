@@ -104,7 +104,7 @@ const ListViewContainer = styled.div`
   position: relative;
   height: 100vh;
   background: white;
-  background-image: url(${({ bg }) => cloudinaryOptimize(bg, 500)});
+  background-image: url(${({ bg }) => bg});
   background-position: center;
   background-size: cover;
   display: flex;

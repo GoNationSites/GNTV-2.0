@@ -33,7 +33,7 @@ const SlideContainer = styled.div`
   position: relative;
   height: 100vh;
   background: gray;
-  background-image: url(${({ bg }) => cloudinaryOptimize(bg, 500)});
+  background-image: url(${({ bg }) => bg});
   background-position: center;
   background-size: cover;
 `

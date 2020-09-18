@@ -33,7 +33,7 @@ export default ShoutSlide
 const SlideContainer = styled.div`
   position: relative;
   height: 100vh;
-  background-image: url(${({ bg }) => cloudinaryOptimize(bg, 2000)});
+  background-image: url(${({ bg }) => bg});
   background-position: center;
   background-size: cover;
   padding: 4rem;
