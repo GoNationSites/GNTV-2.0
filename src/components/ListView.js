@@ -8,7 +8,7 @@ import cloudinaryOptimize from '../helpers/cloudinaryOptimize'
 import splitSectionChildren from '../helpers/splitSectionChildren'
 import ListMenuItem from './ListMenuItem'
 
-const ListView = ({ data }) => {
+const ListView = ({ data, config }) => {
   const [status, setStatus] = useState({
     first: true,
     pos: ''
@@ -17,17 +17,6 @@ const ListView = ({ data }) => {
   const refContainer = useRef()
 
   const defaultDuration = 400000
-  const getDuration = () => {
-    if (ctx.config.otherOptions && ctx.config.otherOptions.listViewDuration) {
-      console.log(
-        'getDuration -> ctx.config.otherOptions.listViewDuration',
-        ctx.config.otherOptions.listViewDuration
-      )
-
-      return ctx.config.otherOptions.listViewDuration
-    }
-    return defaultDuration
-  }
 
   const scrollUp = () => {
     setTimeout(() => {
@@ -44,7 +33,7 @@ const ListView = ({ data }) => {
     setTimeout(() => {
       scroll.scrollToBottom({
         containerId: 'containerElement',
-        duration: getDuration(),
+        duration: config.otherOptions.listViewDuration,
         smooth: 'linear',
         offSet: 9000,
         isDynamic: true

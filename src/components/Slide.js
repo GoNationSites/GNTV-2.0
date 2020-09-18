@@ -14,6 +14,8 @@ const Slide = ({ data }) => {
     return <FlyerModeEvent data={data} />
   } else if (data.text) {
     return <ShoutSlide data={data} />
+  } else if (data.caption !== undefined) {
+    return <SlideContainer bg={data.imageUrl}></SlideContainer>
   } else {
     return (
       <SlideContainer bg={data.imageUrl}>

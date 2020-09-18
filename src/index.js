@@ -34,8 +34,15 @@ export const TV = ({ gonationID, plID = '1', texture, tvID }) => {
     config: {}
   })
   const [rawMenuData, setRawMenuData] = useState(null)
+  const [gallery, setGallery] = useState({
+    loading: true,
+    gallery: []
+  })
 
-  const baseURL = 'https://data.prod.gonation.com'
+  const isDev = true
+  const baseURL = isDev
+    ? 'https://maindiscovery.dev.gonation.com'
+    : 'https://data.prod.gonation.com'
 
   useEffect(() => {
     const menuURL = `${baseURL}/pl/get?profile_id=${gonationID}&powerlistId=powered-list-${plID}`
@@ -43,8 +50,27 @@ export const TV = ({ gonationID, plID = '1', texture, tvID }) => {
     const recurringEventsURL = `${baseURL}/profile/recurringevents?profile_id=${gonationID}`
     const shoutURL = `${baseURL}/profile/shoutsnew/${gonationID}`
     const configurationURL = `${baseURL}/profile/gntv/${tvID}?profile_id=${gonationID}`
+    const galleryURL = `${baseURL}/profile/gallery?profile_id=${gonationID}`
 
     // todo: refactor the separate requests into 1 Promise.All
+
+    // fetch gallery data
+    getData(
+      galleryURL,
+      ({ data }) => {
+        setGallery({
+          loading: false,
+          gallery: formatGalleryData(data)
+        })
+        injectPhotos(formatGalleryData(data))
+      },
+      (e) => {
+        setGallery({
+          loading: false,
+          gallery: false
+        })
+      }
+    )
 
     // fetch TV configuration settings
     getData(
@@ -162,7 +188,7 @@ export const TV = ({ gonationID, plID = '1', texture, tvID }) => {
     if (config.config.lastUpdatedAt) {
       getAlerts()
     }
-    const interval = setInterval(() => getAlerts(), 100000)
+    const interval = setInterval(() => getAlerts(), 10000)
 
     return () => {
       clearInterval(interval)
@@ -170,8 +196,24 @@ export const TV = ({ gonationID, plID = '1', texture, tvID }) => {
   }, [config])
 
   // BEGIN FUNCTIONS
+  const formatGalleryData = (albums) =>
+    albums
+      .filter((abm) => abm._id.includes('abm') && abm.name !== 'Shouts')
+      .map((abm) => {
+        const photosWithAlbumTitle = abm.photos.map((el) => ({
+          ...el,
+          album: abm.name
+        }))
+        return photosWithAlbumTitle
+      })
+      .flat()
+
   const injectShout = (shout) => {
     setAllItems((allItems) => [...allItems, shout])
+  }
+
+  const injectPhotos = (photos) => {
+    setAllItems((allItems) => [...allItems, ...photos])
   }
 
   const createEventsCollection = () => {
@@ -184,12 +226,16 @@ export const TV = ({ gonationID, plID = '1', texture, tvID }) => {
   const flattenItems = (data, nested, idx) => {
     const items = data.inventory
       .filter((itm) => itm.item)
-      .map(({ item }) => item)
+      .map(({ item }) => {
+        return {
+          ...item,
+          section: data.section.name
+        }
+      })
 
-    splitSectionChildren(data).childSections.map((childSection, idx) => {
-      // console.log(childSection)
-      return flattenItems(childSection, true, idx)
-    })
+    splitSectionChildren(data).childSections.map((childSection, idx) =>
+      flattenItems(childSection, true, idx)
+    )
 
     setAllItems((allItems) => [...allItems, ...items])
   }
@@ -206,11 +252,20 @@ export const TV = ({ gonationID, plID = '1', texture, tvID }) => {
 
   const filterFunction = (itm) => {
     const filteredInSections = config.config.activeTypes.list1
-    console.log(itm)
+
+    if (
+      itm.item_id &&
+      config.config.filteredOutSections.includes(itm.section)
+    ) {
+      return false
+    }
+
+    if (itm.photo_id && config.config.albumNames.includes(itm.album)) {
+      return false
+    }
 
     // if filteredInSections does NOT include menu, filter out all menu items
     if (!filteredInSections.includes('items') && itm.item_id) {
-      console.log('here')
       return false
     }
 
@@ -219,6 +274,10 @@ export const TV = ({ gonationID, plID = '1', texture, tvID }) => {
     }
 
     if (!filteredInSections.includes('shout') && itm.text) {
+      return false
+    }
+
+    if (!filteredInSections.includes('photos') && itm.photo_id) {
       return false
     }
 
@@ -235,7 +294,9 @@ export const TV = ({ gonationID, plID = '1', texture, tvID }) => {
   const displayTV = () =>
     shuffle(
       allItems
-        .filter((itm) => filterFunction(itm))
+        .filter((itm) => {
+          return filterFunction(itm)
+        })
         .map((item) => <Slide key={getKey(item)} data={item} />)
     )
 
@@ -244,7 +305,8 @@ export const TV = ({ gonationID, plID = '1', texture, tvID }) => {
     recurringEvents.loading &&
     regularEvents.loading &&
     shout.loading &&
-    config.loading
+    config.loading &&
+    gallery.loading
 
   const renderLoading = () => (
     <SlideWrapper>
@@ -274,7 +336,7 @@ export const TV = ({ gonationID, plID = '1', texture, tvID }) => {
 
   const decideLoadingOrList = () => {
     if (isListMode() && rawMenuData) {
-      return <ListView data={rawMenuData} />
+      return <ListView data={rawMenuData} config={config.config} />
     }
     return renderLoading()
   }
@@ -287,7 +349,7 @@ export const TV = ({ gonationID, plID = '1', texture, tvID }) => {
       }}
     >
       <CarouselContainer>
-        {!fetchingData() && allItems.length > 5 && !isListMode() ? (
+        {!fetchingData() && !isListMode() ? (
           <Carousel {...configuration}>{displayTV()}</Carousel>
         ) : (
           decideLoadingOrList()
