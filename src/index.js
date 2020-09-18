@@ -355,7 +355,8 @@ export const TV = ({ gonationID, plID = '1', texture, tvID }) => {
         !isListMode() &&
         config.config &&
         config.config.activeTypes &&
-        config.config.activeTypes.list1 ? (
+        config.config.activeTypes.list1 &&
+        allItems.length > 2 ? (
           <Carousel {...configuration}>{displayTV()}</Carousel>
         ) : (
           decideLoadingOrList()
