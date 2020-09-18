@@ -3,10 +3,6 @@ import { Carousel } from 'react-responsive-carousel'
 import 'react-responsive-carousel/lib/styles/carousel.min.css'
 import styled from 'styled-components'
 
-// todo remove this
-import axios from 'axios-jsonp'
-import jsonAdapter from 'axios-jsonp'
-
 import splitSectionChildren from './helpers/splitSectionChildren'
 import { getData } from './api/request'
 import Slide from './components/Slide'
@@ -14,6 +10,7 @@ import ShoutTicker from './components/ShoutTicker'
 import shuffle from './helpers/shuffle'
 
 import TVContext from './TVContext'
+import ListView from './components/ListView'
 
 export const TV = ({ gonationID, plID = '1', texture, tvID }) => {
   // todo: convert allItems and menuLoading to be it's own piece of state
@@ -36,7 +33,13 @@ export const TV = ({ gonationID, plID = '1', texture, tvID }) => {
     loading: true,
     config: {}
   })
+  const [rawMenuData, setRawMenuData] = useState(null)
+  const [gallery, setGallery] = useState({
+    loading: true,
+    gallery: []
+  })
 
+  const isDev = false
   const baseURL = 'https://data.prod.gonation.com'
 
   useEffect(() => {
@@ -45,8 +48,27 @@ export const TV = ({ gonationID, plID = '1', texture, tvID }) => {
     const recurringEventsURL = `${baseURL}/profile/recurringevents?profile_id=${gonationID}`
     const shoutURL = `${baseURL}/profile/shoutsnew/${gonationID}`
     const configurationURL = `${baseURL}/profile/gntv/${tvID}?profile_id=${gonationID}`
+    const galleryURL = `${baseURL}/profile/gallery?profile_id=${gonationID}`
 
     // todo: refactor the separate requests into 1 Promise.All
+
+    // fetch gallery data
+    getData(
+      galleryURL,
+      ({ data }) => {
+        setGallery({
+          loading: false,
+          gallery: formatGalleryData(data)
+        })
+        injectPhotos(formatGalleryData(data))
+      },
+      (e) => {
+        setGallery({
+          loading: false,
+          gallery: false
+        })
+      }
+    )
 
     // fetch TV configuration settings
     getData(
@@ -124,11 +146,13 @@ export const TV = ({ gonationID, plID = '1', texture, tvID }) => {
     getData(
       menuURL,
       (res) => {
+        console.log('making req for menu', res)
         flattenItems(res.data[0])
+        setRawMenuData(res.data[0])
+
         setMenuLoading(false)
       },
       (e) => {
-        setAllItems([])
         setMenuLoading(false)
         console.log('error occurred: ', e)
       }
@@ -163,7 +187,7 @@ export const TV = ({ gonationID, plID = '1', texture, tvID }) => {
     if (config.config.lastUpdatedAt) {
       getAlerts()
     }
-    const interval = setInterval(() => getAlerts(), 100000)
+    const interval = setInterval(() => getAlerts(), 10000)
 
     return () => {
       clearInterval(interval)
@@ -171,8 +195,24 @@ export const TV = ({ gonationID, plID = '1', texture, tvID }) => {
   }, [config])
 
   // BEGIN FUNCTIONS
+  const formatGalleryData = (albums) =>
+    albums
+      .filter((abm) => abm._id.includes('abm') && abm.name !== 'Shouts')
+      .map((abm) => {
+        const photosWithAlbumTitle = abm.photos.map((el) => ({
+          ...el,
+          album: abm.name
+        }))
+        return photosWithAlbumTitle
+      })
+      .flat()
+
   const injectShout = (shout) => {
     setAllItems((allItems) => [...allItems, shout])
+  }
+
+  const injectPhotos = (photos) => {
+    setAllItems((allItems) => [...allItems, ...photos])
   }
 
   const createEventsCollection = () => {
@@ -184,17 +224,17 @@ export const TV = ({ gonationID, plID = '1', texture, tvID }) => {
 
   const flattenItems = (data, nested, idx) => {
     const items = data.inventory
-      .filter((el) => console.log('flattenItems -> el', el))
-
       .filter((itm) => itm.item)
-      .map(({ item }) => item)
-
-    splitSectionChildren(data)
-      .childSections.filter((el) => console.log('sl: ', el))
-      .map((childSection, idx) => {
-        // console.log(childSection)
-        return flattenItems(childSection, true, idx)
+      .map(({ item }) => {
+        return {
+          ...item,
+          section: data.section.name
+        }
       })
+
+    splitSectionChildren(data).childSections.map((childSection, idx) =>
+      flattenItems(childSection, true, idx)
+    )
 
     setAllItems((allItems) => [...allItems, ...items])
   }
@@ -212,16 +252,31 @@ export const TV = ({ gonationID, plID = '1', texture, tvID }) => {
   const filterFunction = (itm) => {
     const filteredInSections = config.config.activeTypes.list1
 
+    if (
+      itm.item_id &&
+      config.config.filteredOutSections.includes(itm.section)
+    ) {
+      return false
+    }
+
+    if (itm.photo_id && config.config.albumNames.includes(itm.album)) {
+      return false
+    }
+
     // if filteredInSections does NOT include menu, filter out all menu items
-    if (!filteredInSections.includes('items') && itm.item_id) {
+    if (itm.item_id && !filteredInSections.includes('items')) {
       return false
     }
 
-    if (!filteredInSections.includes('events') && itm.starts) {
+    if (itm.starts && !filteredInSections.includes('events')) {
       return false
     }
 
-    if (!filteredInSections.includes('shout') && itm.text) {
+    if (itm.text && !filteredInSections.includes('shout')) {
+      return false
+    }
+
+    if (itm.album && !filteredInSections.includes('photos')) {
       return false
     }
 
@@ -230,7 +285,10 @@ export const TV = ({ gonationID, plID = '1', texture, tvID }) => {
     }
     if (itm.starts) {
       return itm
-    } else if (!itm.imagePrefix.includes('default')) {
+    } else if (
+      !itm.imagePrefix.includes('default') &&
+      !itm.imagePrefix.includes('copy')
+    ) {
       return itm
     }
   }
@@ -238,7 +296,9 @@ export const TV = ({ gonationID, plID = '1', texture, tvID }) => {
   const displayTV = () =>
     shuffle(
       allItems
-        .filter((itm) => filterFunction(itm))
+        .filter((itm) => {
+          return filterFunction(itm)
+        })
         .map((item) => <Slide key={getKey(item)} data={item} />)
     )
 
@@ -246,7 +306,9 @@ export const TV = ({ gonationID, plID = '1', texture, tvID }) => {
     menuLoading &&
     recurringEvents.loading &&
     regularEvents.loading &&
-    shout.loading
+    shout.loading &&
+    config.loading &&
+    gallery.loading
 
   const renderLoading = () => (
     <SlideWrapper>
@@ -260,13 +322,25 @@ export const TV = ({ gonationID, plID = '1', texture, tvID }) => {
     showIndicators: false,
     useKeyboardArrows: true,
     autoPlay: true,
-    // interval: config.config.slideDuration ? config.config.slideDuration : 5000,
-    interval: 5000,
+    interval: config.config.slideDuration ? config.config.slideDuration : 5000,
+    // interval: 5000,
     transitionTime: 0,
     infiniteLoop: true,
     stopOnHover: false,
     showThumbs: false
     // axis: 'vertical'
+  }
+
+  const isListMode = () =>
+    config.config.displayType && config.config.displayType.type === 'list'
+      ? true
+      : false
+
+  const decideLoadingOrList = () => {
+    if (isListMode() && rawMenuData) {
+      return <ListView data={rawMenuData} config={config.config} />
+    }
+    return renderLoading()
   }
 
   return (
@@ -277,10 +351,14 @@ export const TV = ({ gonationID, plID = '1', texture, tvID }) => {
       }}
     >
       <CarouselContainer>
-        {!fetchingData() && allItems.length > 1 ? (
+        {!fetchingData() &&
+        !isListMode() &&
+        config.config &&
+        config.config.activeTypes &&
+        config.config.activeTypes.list1 ? (
           <Carousel {...configuration}>{displayTV()}</Carousel>
         ) : (
-          renderLoading()
+          decideLoadingOrList()
         )}
         <PoweredByContainer>
           <img

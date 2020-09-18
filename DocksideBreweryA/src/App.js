@@ -8,11 +8,11 @@ const App = () => {
     <TV
       // gonationID='bzn-XaUXGg1OScOoINf6ICrrUA'
       texture='https://res.cloudinary.com/gonation/image/upload/v1599581888/GNTV/spotted-horse-shelton-texture.jpg'
-      plID='1'
+      plID='7'
       // tvID='gntv--MzCwN76Qu6-yX4CDOREcg'
 
-      gonationID='bzn--mUJlTrQRUm0vW1hq8DJyQ'
-      tvID='gntv-b9fVGCuSRXGx3DfXfDw2SA'
+      gonationID='bzn-yO3xgUsKQCS7GWg0Q2ewbQ'
+      tvID='gntv-UF3fM7-HSZS6v0fklyCsdA'
     />
   )
 }

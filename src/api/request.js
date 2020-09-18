@@ -9,7 +9,6 @@ export function getData(url, callback, errorcallback) {
   })
     .then((res) => {
       //do something
-      console.log('res: ', res)
       if (callback != null) {
         callback(res)
       }
