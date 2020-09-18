@@ -39,10 +39,8 @@ export const TV = ({ gonationID, plID = '1', texture, tvID }) => {
     gallery: []
   })
 
-  const isDev = true
-  const baseURL = isDev
-    ? 'https://maindiscovery.dev.gonation.com'
-    : 'https://data.prod.gonation.com'
+  const isDev = false
+  const baseURL = 'https://data.prod.gonation.com'
 
   useEffect(() => {
     const menuURL = `${baseURL}/pl/get?profile_id=${gonationID}&powerlistId=powered-list-${plID}`
@@ -148,6 +146,7 @@ export const TV = ({ gonationID, plID = '1', texture, tvID }) => {
     getData(
       menuURL,
       (res) => {
+        console.log('making req for menu', res)
         flattenItems(res.data[0])
         setRawMenuData(res.data[0])
 
@@ -265,19 +264,19 @@ export const TV = ({ gonationID, plID = '1', texture, tvID }) => {
     }
 
     // if filteredInSections does NOT include menu, filter out all menu items
-    if (!filteredInSections.includes('items') && itm.item_id) {
+    if (itm.item_id && !filteredInSections.includes('items')) {
       return false
     }
 
-    if (!filteredInSections.includes('events') && itm.starts) {
+    if (itm.starts && !filteredInSections.includes('events')) {
       return false
     }
 
-    if (!filteredInSections.includes('shout') && itm.text) {
+    if (itm.text && !filteredInSections.includes('shout')) {
       return false
     }
 
-    if (!filteredInSections.includes('photos') && itm.photo_id) {
+    if (itm.album && !filteredInSections.includes('photos')) {
       return false
     }
 
@@ -286,7 +285,10 @@ export const TV = ({ gonationID, plID = '1', texture, tvID }) => {
     }
     if (itm.starts) {
       return itm
-    } else if (!itm.imagePrefix.includes('default')) {
+    } else if (
+      !itm.imagePrefix.includes('default') &&
+      !itm.imagePrefix.includes('copy')
+    ) {
       return itm
     }
   }
@@ -349,7 +351,11 @@ export const TV = ({ gonationID, plID = '1', texture, tvID }) => {
       }}
     >
       <CarouselContainer>
-        {!fetchingData() && !isListMode() ? (
+        {!fetchingData() &&
+        !isListMode() &&
+        config.config &&
+        config.config.activeTypes &&
+        config.config.activeTypes.list1 ? (
           <Carousel {...configuration}>{displayTV()}</Carousel>
         ) : (
           decideLoadingOrList()
