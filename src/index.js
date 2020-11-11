@@ -11,8 +11,9 @@ import shuffle from './helpers/shuffle'
 
 import TVContext from './TVContext'
 import ListView from './components/ListView'
+import PageView from './components/PageView'
 
-export const TV = ({ gonationID, plID = '1', texture, tvID }) => {
+export const TV = ({ gonationID, plID = '1', texture, tvID, listConfig }) => {
   // todo: convert allItems and menuLoading to be it's own piece of state
   const [allItems, setAllItems] = useState([])
   const [menuLoading, setMenuLoading] = useState(true)
@@ -347,10 +348,17 @@ export const TV = ({ gonationID, plID = '1', texture, tvID }) => {
     <TVContext.Provider
       value={{
         ...config,
+        ...listConfig,
         texture
       }}
     >
-      <CarouselContainer>
+      {!fetchingData() ? (
+        <PageView data={allItems.filter((itm) => itm.item_id)}></PageView>
+      ) : (
+        ''
+      )}
+
+      {/* <CarouselContainer>
         {!fetchingData() &&
         !isListMode() &&
         config.config &&
@@ -375,7 +383,7 @@ export const TV = ({ gonationID, plID = '1', texture, tvID }) => {
         ) : (
           ''
         )}
-      </CarouselContainer>
+      </CarouselContainer> */}
     </TVContext.Provider>
   )
 }

@@ -1,18 +1,24 @@
 import React from 'react'
 
 import { TV } from 'gntv-component'
-import 'gntv-component/dist/index.css'
+// import 'gntv-component/dist/index.css'
 
 const App = () => {
+  const listConfiguration = {
+    titleColor: '#40ADC0',
+    itemColor: '#FC6E06',
+    textColor: '#262626'
+  }
   return (
     <TV
       // gonationID='bzn-XaUXGg1OScOoINf6ICrrUA'
-      texture='https://res.cloudinary.com/gonation/image/upload/v1599581888/GNTV/spotted-horse-shelton-texture.jpg'
+      listConfig={{ listConfiguration }}
+      texture='https://res.cloudinary.com/gonation/image/upload/v1605023949/GNTV/la-picante-texture.jpg'
       plID='1'
       // tvID='gntv--MzCwN76Qu6-yX4CDOREcg'
 
-      gonationID='bzn--mUJlTrQRUm0vW1hq8DJyQ'
-      tvID='gntv-b9fVGCuSRXGx3DfXfDw2SA'
+      gonationID='bzn-4LVvOm-bR2i9TE2wDplhoA'
+      tvID='gntv-4KWUjwOhQa_naAluFGOIiA'
     />
   )
 }
