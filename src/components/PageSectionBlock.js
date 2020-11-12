@@ -127,8 +127,9 @@ const Box = styled.div`
   flex-wrap: wrap;
   height: 100%;
   justify-content: flex-start;
+  padding-top: 2.5rem;
   .Frittata5 {
-    padding-bottom: 6rem;
+    padding-bottom: 3rem;
     margin: auto;
   }
   > div {
