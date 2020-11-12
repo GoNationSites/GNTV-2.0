@@ -97,6 +97,7 @@ const SingleSectionBlock = styled.div`
     line-height: 1;
     width: ${({ isEntireScreen }) => (isEntireScreen ? '100%' : 'auto')};
     text-align: ${({ isEntireScreen }) => (isEntireScreen ? 'center' : 'left')};
+    text-transform: uppercase;
   }
   h4 {
     color: ${({ configuration }) => configuration.itemColor};
@@ -115,8 +116,8 @@ const SingleSectionBlock = styled.div`
     font-weight: bold;
     text-transform: uppercase;
     line-height: normal;
-    font-size: ${({ isEntireScreen }) =>
-      isEntireScreen ? '3.5rem' : '1.8rem'};
+    font-size: ${({ isEntireScreen }) => (isEntireScreen ? '3rem' : '1.8rem')};
+    margin: 0;
   }
 `
 
@@ -125,9 +126,10 @@ const Box = styled.div`
   flex-direction: column;
   flex-wrap: wrap;
   height: 100%;
-  justify-content: center;
+  justify-content: flex-start;
   .Frittata5 {
-    padding-bottom: 154px;
+    padding-bottom: 6rem;
+    margin: auto;
   }
   > div {
     width: 50%;
