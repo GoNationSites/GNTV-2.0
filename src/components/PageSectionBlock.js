@@ -3,60 +3,59 @@ import styled from 'styled-components'
 import TVContext from '../TVContext'
 
 const MenuBlock = styled.div`
-  height: 100%;
-  /* grid-area: ${({ area }) => area}; */
   grid-area: ${({ area }) => area};
-
   display: flex;
   flex-direction: column;
   flex-wrap: wrap;
   overflow: hidden;
   box-sizing: border-box;
   font-family: 'Oswald', sans-serif;
-  /* padding: 16px 16px 32px 16px; */
   border: ${({ withBorder, configuration }) =>
     withBorder ? `5px solid ${configuration.titleColor}` : ''};
   border-radius: 3px;
-  position: relative;
   padding: 1.25rem;
   text-align: left;
-  /* padding-top: 150px; */
+
+  h1,
+  h4,
+  h5,
+  p {
+    margin: 0;
+  }
+
+  h4,
+  h1 {
+    text-transform: uppercase;
+  }
+
+  h4,
+  h5 {
+    font-size: 2.5rem;
+    font-weight: bold;
+  }
 
   > div,
   h1 {
     width: ${({ area }) =>
       area === '1 / 1 / 4 / 4' || area === '3 / 2 / 4 / 4' ? '25%' : '50%'};
-
     padding: 1rem 1rem;
     box-sizing: border-box;
   }
   h1 {
-    /* width: 100%; */
-    /* position: absolute; */
-    top: 0;
-    left: 0;
     font-size: 6rem;
-    margin: 0;
     font-family: 'Playfair Display SC', serif;
     color: ${({ configuration }) => configuration.titleColor};
     line-height: 1;
   }
   h4 {
-    font-size: 2.5rem;
-    margin: 0;
-    text-transform: uppercase;
     color: ${({ configuration }) => configuration.itemColor};
   }
   h5 {
-    font-size: 2.5rem;
     color: ${({ configuration }) => configuration.titleColor};
-    font-weight: bold;
-    margin: 0;
   }
   p {
     font-size: 1.75rem;
     font-weight: 600;
-    margin: 0;
     line-height: 2.5rem;
   }
   .hard-item {
@@ -64,14 +63,8 @@ const MenuBlock = styled.div`
   }
 `
 
-const PageSectionBlock = ({
-  data,
-  area,
-  sectionName,
-  withBorder,
-  hardData,
-  rename
-}) => {
+const PageSectionBlock = ({ data, pageData }) => {
+  const { hardData, area, withBorder, rename, name } = pageData
   const ctx = useContext(TVContext)
 
   const renderHardcodedElements = () => (
@@ -89,14 +82,16 @@ const PageSectionBlock = ({
       configuration={ctx.listConfiguration}
       withBorder={withBorder}
     >
-      {rename ? rename : <h1>{sectionName}</h1>}
+      {rename ? rename : <h1>{name}</h1>}
       {data.map((itm) => (
         <div>
           <h4>{itm.name}</h4>
           <p>{itm.desc}</p>
         </div>
       ))}
-      <div>{hardData.items ? renderHardcodedElements() : ''}</div>
+      <div>
+        {hardData && hardData.items.length ? renderHardcodedElements() : ''}
+      </div>
     </MenuBlock>
   )
 }

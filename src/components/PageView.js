@@ -11,17 +11,13 @@ const PageViewGrid = styled.div`
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
   grid-template-rows: 1fr 1fr 1fr;
-  gap: 0px 0px;
+  gap: 0px;
   padding: 4rem;
 
   grid-template-areas:
     '. . .'
     '. . .'
     '. . .';
-
-  .slide {
-    text-align: left;
-  }
 `
 
 const Wrapper = styled.div`
@@ -31,7 +27,6 @@ const Wrapper = styled.div`
   }
 `
 
-// Uses grid-area for CSS Grid variables
 // grid-area: row-start / column-start / row-end / column-end
 const PageView = ({ data }) => {
   const ctx = useContext(TVContext)
@@ -118,23 +113,17 @@ const PageView = ({ data }) => {
     useKeyboardArrows: true,
     autoPlay: true,
     interval: ctx.config.slideDuration ? ctx.config.slideDuration : 5000,
-    // interval: 5000,
     transitionTime: 0,
     infiniteLoop: true,
     stopOnHover: false,
     showThumbs: false
-    // axis: 'vertical'
   }
 
   const renderGridContent = (page) =>
-    EXAMPLE_PAGES[page].map(({ name, area, withBorder, hardData, rename }) => (
+    EXAMPLE_PAGES[page].map((pageData) => (
       <PageSectionBlock
-        sectionName={name}
-        data={data.filter((itm) => itm.section === name)}
-        area={area}
-        hardData={hardData ? hardData : []}
-        rename={rename}
-        withBorder={withBorder ? withBorder : false}
+        pageData={pageData}
+        data={data.filter((itm) => itm.section === pageData.name)}
       />
     ))
 
