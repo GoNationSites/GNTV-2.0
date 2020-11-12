@@ -19,8 +19,11 @@ const MenuBlock = styled.div`
   ${({ isEntireScreen }) =>
     isEntireScreen
       ? `
-    justify-content: center;
-    align-items: center;
+    justify-content: flex-start;
+    align-items: flex-start;
+    // flex-direction: row;
+    flex-wrap: wrap;
+    
   `
       : ''}
 
@@ -38,9 +41,9 @@ const MenuBlock = styled.div`
 
   h4,
   h5 {
-    font-size: 1.8rem;
     font-weight: bold;
     line-height: normal;
+    font-size: ${({ isEntireScreen }) => (isEntireScreen ? '4rem' : '1.8rem')};
   }
 
   > div,
@@ -50,10 +53,12 @@ const MenuBlock = styled.div`
     box-sizing: border-box;
   }
   h1 {
-    font-size: 3.5rem;
+    font-size: ${({ isEntireScreen }) => (isEntireScreen ? '8rem' : '3.5rem')};
     font-family: 'Playfair Display SC', serif;
     color: ${({ configuration }) => configuration.titleColor};
     line-height: 1;
+    width: ${({ isEntireScreen }) => (isEntireScreen ? '100%' : 'auto')};
+    text-align: ${({ isEntireScreen }) => (isEntireScreen ? 'center' : 'left')};
   }
   h4 {
     color: ${({ configuration }) => configuration.itemColor};
@@ -62,15 +67,71 @@ const MenuBlock = styled.div`
     color: ${({ configuration }) => configuration.titleColor};
   }
   p {
-    font-size: 1rem;
+    font-size: ${({ isEntireScreen }) => (isEntireScreen ? '2rem' : '1rem')};
     font-weight: 600;
-    max-width: 450px;
+    max-width: ${({ isEntireScreen }) => (isEntireScreen ? 'none' : '450px')};
   }
   .hard-item {
     margin-bottom: 0.75rem;
   }
   .Cola3 {
     margin-top: 72px;
+  }
+`
+
+const SingleSectionBlock = styled.div`
+  grid-area: ${({ area }) => area};
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  p {
+    margin: 0;
+    text-align: left;
+  }
+  h1 {
+    font-size: ${({ isEntireScreen }) => (isEntireScreen ? '8rem' : '3.5rem')};
+    font-family: 'Playfair Display SC', serif;
+    color: ${({ configuration }) => configuration.titleColor};
+    line-height: 1;
+    width: ${({ isEntireScreen }) => (isEntireScreen ? '100%' : 'auto')};
+    text-align: ${({ isEntireScreen }) => (isEntireScreen ? 'center' : 'left')};
+  }
+  h4 {
+    color: ${({ configuration }) => configuration.itemColor};
+  }
+  h5 {
+    color: ${({ configuration }) => configuration.titleColor};
+  }
+  p {
+    font-size: ${({ isEntireScreen }) => (isEntireScreen ? '2rem' : '1rem')};
+    font-weight: 600;
+    max-width: ${({ isEntireScreen }) => (isEntireScreen ? 'none' : '450px')};
+    margin-top: 1.5rem;
+  }
+  h4,
+  h5 {
+    font-weight: bold;
+    text-transform: uppercase;
+    line-height: normal;
+    font-size: ${({ isEntireScreen }) =>
+      isEntireScreen ? '3.5rem' : '1.8rem'};
+  }
+`
+
+const Box = styled.div`
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  height: 100%;
+  justify-content: center;
+  .Frittata5 {
+    padding-bottom: 154px;
+  }
+  > div {
+    width: 50%;
+    padding: 2rem;
   }
 `
 
@@ -85,11 +146,29 @@ const getWidth = (area) => {
     case '1 / 1 / 4 / 4':
       return '25%'
     case '3 / 2 / 4 / 4':
-      return '25%'
+      return '24%'
     default:
       return '50%;'
   }
 }
+
+const PoweredByContainer = styled.div`
+  position: absolute;
+  width: 100%;
+  bottom: 0;
+  left: 0;
+  display: flex;
+  justify-content: center;
+
+  img {
+    max-width: 350px;
+    margin: auto;
+    padding: 1rem 1rem 0.5rem 1rem;
+    background: rgba(0, 0, 0, 0.5);
+    border-top-left-radius: 6px;
+    border-top-right-radius: 6px;
+  }
+`
 
 const PageSectionBlock = ({ data, pageData }) => {
   const { hardData, area, withBorder, rename, name } = pageData
@@ -106,27 +185,61 @@ const PageSectionBlock = ({ data, pageData }) => {
     </React.Fragment>
   )
 
-  return (
-    <MenuBlock
+  return isEntireScreen ? (
+    <SingleSectionBlock
       area={area}
       configuration={ctx.listConfiguration}
       withBorder={withBorder}
       isEntireScreen={isEntireScreen}
     >
       {rename ? rename : <h1>{name}</h1>}
-      {data.map((itm, idx) => (
-        <div className={`${itm.name}${idx}`}>
-          <h4>
-            {itm.name}{' '}
-            {itm.section !== 'Beverages' ? itm.variants[0].price : ''}
-          </h4>
-          <p>{itm.desc}</p>
+      <Box>
+        {data.map((itm, idx) => (
+          <div className={`${itm.name}${idx}`}>
+            <h4>
+              {itm.name}{' '}
+              {itm.section !== 'Beverages' ? itm.variants[0].price : ''}
+            </h4>
+            {itm.desc ? <p>{itm.desc}</p> : ''}
+          </div>
+        ))}
+      </Box>
+      <PoweredByContainer>
+        <img
+          src='https://www.gonationsites.com/GNSE/gn-sites/images/gn-power-white.svg'
+          alt='GoNation'
+        />
+      </PoweredByContainer>
+    </SingleSectionBlock>
+  ) : (
+    <React.Fragment>
+      <MenuBlock
+        area={area}
+        configuration={ctx.listConfiguration}
+        withBorder={withBorder}
+        isEntireScreen={isEntireScreen}
+      >
+        {rename ? rename : <h1>{name}</h1>}
+        {data.map((itm, idx) => (
+          <div className={`${itm.name}${idx}`}>
+            <h4>
+              {itm.name}{' '}
+              {itm.section !== 'Beverages' ? itm.variants[0].price : ''}
+            </h4>
+            <p>{itm.desc}</p>
+          </div>
+        ))}
+        <div>
+          {hardData && hardData.items.length ? renderHardcodedElements() : ''}
         </div>
-      ))}
-      <div>
-        {hardData && hardData.items.length ? renderHardcodedElements() : ''}
-      </div>
-    </MenuBlock>
+      </MenuBlock>
+      <PoweredByContainer>
+        <img
+          src='https://www.gonationsites.com/GNSE/gn-sites/images/gn-power-white.svg'
+          alt='GoNation'
+        />
+      </PoweredByContainer>
+    </React.Fragment>
   )
 }
 
