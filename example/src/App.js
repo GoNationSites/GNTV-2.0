@@ -7,18 +7,83 @@ const App = () => {
   const listConfiguration = {
     titleColor: '#40ADC0',
     itemColor: '#FC6E06',
-    textColor: '#262626'
+    textColor: '#262626',
+    pages: {
+      Breakfast: {
+        page1: [
+          {
+            name: 'Breakfast',
+            area: '1 / 1 / 4 / 4'
+          }
+        ]
+      },
+      'Main Menu': {
+        page1: [
+          {
+            name: 'Sandwiches',
+            area: '1 / 1 / 3 / 2'
+          },
+          {
+            name: 'Picante Tacos',
+            area: '1 / 2 / 3 / 3'
+          },
+          {
+            name: 'Family Menu',
+            area: '1 / 3 / 3 / 4'
+          },
+          {
+            name: 'Sides',
+            area: '3 / 1 / 4 / 2'
+          },
+          {
+            name: 'Beverages',
+            area: '3 / 2 / 4 / 4',
+            withBorder: true
+          }
+        ],
+        page2: [
+          {
+            name: 'Garden Salads',
+            rename: (
+              <h1>
+                Fresh & <br /> Organic <br /> Salads
+              </h1>
+            ),
+            area: '1 / 1 / 4 / 3',
+            withBorder: true,
+            hardData: {
+              title: 'Add:',
+              items: [
+                'Avocado',
+                'Organic chicken',
+                'Gulf Shrimp 6 (3 pieces) or 9( 5 pieces)',
+                'Scottish Salmon (4oz) 9.5'
+              ]
+            }
+          },
+          {
+            name: 'Pasta',
+            area: '1 / 3 / 4 / 4',
+            hardData: {
+              title: 'Add:',
+              items: [
+                'Organic chicken 5',
+                'Gulf Shrimp 6 (3 pieces) or 9( 5 pieces)',
+                'Organic Salmon (4oz) 9.5'
+              ]
+            }
+          }
+        ]
+      }
+    }
   }
   return (
     <TV
-      // gonationID='bzn-XaUXGg1OScOoINf6ICrrUA'
       listConfig={{ listConfiguration }}
       texture='https://res.cloudinary.com/gonation/image/upload/v1605023949/GNTV/la-picante-texture.jpg'
       plID='1'
-      // tvID='gntv--MzCwN76Qu6-yX4CDOREcg'
-
       gonationID='bzn-4LVvOm-bR2i9TE2wDplhoA'
-      tvID='gntv-4KWUjwOhQa_naAluFGOIiA'
+      tvID='gntv-GHSkZrPaTq2vGkmL07RskQ'
     />
   )
 }

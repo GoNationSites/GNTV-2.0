@@ -337,6 +337,11 @@ export const TV = ({ gonationID, plID = '1', texture, tvID, listConfig }) => {
       ? true
       : false
 
+  const isPageMode = () =>
+    config.config.displayType && config.config.displayType.type === 'page'
+      ? true
+      : false
+
   const decideLoadingOrList = () => {
     if (isListMode() && rawMenuData) {
       return <ListView data={rawMenuData} config={config.config} />
@@ -352,7 +357,7 @@ export const TV = ({ gonationID, plID = '1', texture, tvID, listConfig }) => {
         texture
       }}
     >
-      {!fetchingData() ? (
+      {!fetchingData() && isPageMode() ? (
         <Wrapper texture={texture}>
           <PageView data={allItems.filter((itm) => itm.item_id)}></PageView>
         </Wrapper>

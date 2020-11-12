@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React, { useContext, useState, useEffect } from 'react'
 import styled from 'styled-components'
 import { Carousel } from 'react-responsive-carousel'
 
@@ -30,81 +30,21 @@ const Wrapper = styled.div`
 // grid-area: row-start / column-start / row-end / column-end
 const PageView = ({ data }) => {
   const ctx = useContext(TVContext)
-  console.log('ctx is: ', ctx)
-  const EXAMPLE_PAGES = {
-    // page1: [
-    //   //   {
-    //   //     name: 'Breakfast',
-    //   //     area: '1 / 1 / 4 / 4'
-    //   //   }
-    //   //   //   {
-    //   //   //     name: 'Garden Salads',
-    //   //   //     area: '1 / 1 / 4 / 3'
-    //   //   //   },
-    //   //   //   {
-    //   //   //     name: 'Pasta',
-    //   //   //     area: '1 / 3 / 4 / 4'
-    //   //   //   }
-    // ],
-    page1: [
-      {
-        name: 'Sandwiches',
-        area: '1 / 1 / 3 / 2'
-      },
-      {
-        name: 'Picante Tacos',
-        area: '1 / 2 / 3 / 3'
-      },
-      {
-        name: 'Family Menu',
-        area: '1 / 3 / 3 / 4'
-      },
-      {
-        name: 'Sides',
-        area: '3 / 1 / 4 / 2'
-      },
-      {
-        name: 'Beverages',
-        area: '3 / 2 / 4 / 4',
-        withBorder: true
-      }
-    ],
-    page2: [
-      {
-        name: 'Garden Salads',
-        rename: (
-          <h1>
-            Fresh & <br /> Organic <br /> Salads
-          </h1>
-        ),
-        area: '1 / 1 / 4 / 3',
-        withBorder: true,
-        hardData: {
-          title: 'Add:',
-          items: [
-            'Avocado',
-            'Organic chicken',
-            'Gulf Shrimp 6 (3 pieces) or 9( 5 pieces)',
-            'Scottish Salmon (4oz) 9.5'
-          ]
-        }
-      },
-      {
-        name: 'Pasta',
-        area: '1 / 3 / 4 / 4',
-        hardData: {
-          title: 'Add:',
-          items: [
-            'Organic chicken 5',
-            'Gulf Shrimp 6 (3 pieces) or 9( 5 pieces)',
-            'Organic Salmon (4oz) 9.5'
-          ]
-        }
-      }
-    ]
-  }
+  const { config, listConfiguration } = ctx
+  const potentialPages = Object.keys(config.otherOptions.pageViewData)
+  const [activeDataForPageView, setActiveDataForPageView] = useState(
+    potentialPages[0]
+  )
 
-  const pages = Object.keys(EXAMPLE_PAGES)
+  useEffect(() => {
+    potentialPages.forEach((page) => {
+      if (listConfiguration.pages[page]) {
+        setActiveDataForPageView(page)
+      }
+    })
+  }, [config])
+
+  const pages = Object.keys(listConfiguration.pages[activeDataForPageView])
 
   let configuration = {
     showArrows: false,
@@ -112,7 +52,7 @@ const PageView = ({ data }) => {
     showIndicators: false,
     useKeyboardArrows: true,
     autoPlay: true,
-    interval: ctx.config.slideDuration ? ctx.config.slideDuration : 5000,
+    interval: config.slideDuration ? config.slideDuration : 5000,
     transitionTime: 0,
     infiniteLoop: true,
     stopOnHover: false,
@@ -120,7 +60,7 @@ const PageView = ({ data }) => {
   }
 
   const renderGridContent = (page) =>
-    EXAMPLE_PAGES[page].map((pageData) => (
+    listConfiguration.pages[activeDataForPageView][page].map((pageData) => (
       <PageSectionBlock
         pageData={pageData}
         data={data.filter((itm) => itm.section === pageData.name)}
