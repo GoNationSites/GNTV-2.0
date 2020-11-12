@@ -38,11 +38,13 @@ const PageView = ({ data }) => {
 
   useEffect(() => {
     potentialPages.forEach((page) => {
-      if (listConfiguration.pages[page]) {
+      console.log('listConfiguration is: ', listConfiguration)
+      if (config.otherOptions.pageViewData[page] === true) {
+        console.log('setting for : ', page)
         setActiveDataForPageView(page)
       }
     })
-  }, [config])
+  }, [config.otherOptions.pageViewData])
 
   const pages = Object.keys(listConfiguration.pages[activeDataForPageView])
 

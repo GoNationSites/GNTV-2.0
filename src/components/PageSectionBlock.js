@@ -15,6 +15,13 @@ const MenuBlock = styled.div`
   border-radius: 3px;
   padding: 1.25rem;
   text-align: left;
+  ${({ isEntireScreen }) =>
+    isEntireScreen
+      ? `
+    justify-content: center;
+    align-items: center;
+  `
+      : ''}
 
   h1,
   h4,
@@ -36,8 +43,7 @@ const MenuBlock = styled.div`
 
   > div,
   h1 {
-    width: ${({ area }) =>
-      area === '1 / 1 / 4 / 4' || area === '3 / 2 / 4 / 4' ? '25%' : '50%'};
+    width: ${({ area }) => getWidth(area)};
     padding: 1rem 1rem;
     box-sizing: border-box;
   }
@@ -63,9 +69,24 @@ const MenuBlock = styled.div`
   }
 `
 
+const getWidth = (area) => {
+  switch (area) {
+    case '1 / 1 / 4 / 4':
+      return '50%'
+    case '1 / 1 / 4 / 4':
+      return '25%'
+    case '3 / 2 / 4 / 4':
+      return '25%'
+    default:
+      return '50%;'
+  }
+}
+
 const PageSectionBlock = ({ data, pageData }) => {
   const { hardData, area, withBorder, rename, name } = pageData
   const ctx = useContext(TVContext)
+
+  const isEntireScreen = area === '1 / 1 / 4 / 4'
 
   const renderHardcodedElements = () => (
     <React.Fragment>
@@ -81,6 +102,7 @@ const PageSectionBlock = ({ data, pageData }) => {
       area={area}
       configuration={ctx.listConfiguration}
       withBorder={withBorder}
+      isEntireScreen={isEntireScreen}
     >
       {rename ? rename : <h1>{name}</h1>}
       {data.map((itm) => (

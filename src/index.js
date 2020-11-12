@@ -358,7 +358,10 @@ export const TV = ({ gonationID, plID = '1', texture, tvID, listConfig }) => {
       }}
     >
       {/* TODO clean up this gross looking JSX (Break into a function or 2?) */}
-      {!fetchingData() && isPageMode() ? (
+      {!fetchingData() &&
+      isPageMode() &&
+      config.config &&
+      config.config.otherOptions ? (
         <Wrapper texture={texture}>
           <PageView data={allItems.filter((itm) => itm.item_id)}></PageView>
         </Wrapper>
