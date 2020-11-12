@@ -1,7 +1,7 @@
 import React from 'react'
 
 import { TV } from 'gntv-component'
-// import 'gntv-component/dist/index.css'
+// import 'gntv-component/styles.module.css'
 
 const App = () => {
   const listConfiguration = {

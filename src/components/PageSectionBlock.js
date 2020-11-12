@@ -18,7 +18,9 @@ const MenuBlock = styled.div`
     withBorder ? `5px solid ${configuration.titleColor}` : ''};
   border-radius: 3px;
   position: relative;
-  padding-top: 150px;
+  padding: 1.25rem;
+  text-align: left;
+  /* padding-top: 150px; */
 
   > div,
   h1 {
@@ -29,14 +31,15 @@ const MenuBlock = styled.div`
     box-sizing: border-box;
   }
   h1 {
-    width: auto;
-    position: absolute;
+    /* width: 100%; */
+    /* position: absolute; */
     top: 0;
     left: 0;
     font-size: 6rem;
     margin: 0;
     font-family: 'Playfair Display SC', serif;
     color: ${({ configuration }) => configuration.titleColor};
+    line-height: 1;
   }
   h4 {
     font-size: 2.5rem;
@@ -66,7 +69,8 @@ const PageSectionBlock = ({
   area,
   sectionName,
   withBorder,
-  hardData
+  hardData,
+  rename
 }) => {
   const ctx = useContext(TVContext)
 
@@ -85,7 +89,7 @@ const PageSectionBlock = ({
       configuration={ctx.listConfiguration}
       withBorder={withBorder}
     >
-      <h1>{sectionName}</h1>
+      {rename ? rename : <h1>{sectionName}</h1>}
       {data.map((itm) => (
         <div>
           <h4>{itm.name}</h4>

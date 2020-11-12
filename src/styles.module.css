@@ -7,3 +7,7 @@
   font-size: 2em;
   text-align: center;
 }
+
+body {
+  border: 5px solid orange!important;
+}
