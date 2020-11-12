@@ -37,18 +37,19 @@ const MenuBlock = styled.div`
 
   h4,
   h5 {
-    font-size: 2.5rem;
+    font-size: 1.8rem;
     font-weight: bold;
+    line-height: normal;
   }
 
   > div,
   h1 {
     width: ${({ area }) => getWidth(area)};
-    padding: 1rem 1rem;
+    padding: 0.5rem 1rem;
     box-sizing: border-box;
   }
   h1 {
-    font-size: 6rem;
+    font-size: 3.5rem;
     font-family: 'Playfair Display SC', serif;
     color: ${({ configuration }) => configuration.titleColor};
     line-height: 1;
@@ -60,12 +61,15 @@ const MenuBlock = styled.div`
     color: ${({ configuration }) => configuration.titleColor};
   }
   p {
-    font-size: 1.75rem;
+    font-size: 1rem;
     font-weight: 600;
-    line-height: 2.5rem;
   }
   .hard-item {
     margin-bottom: 0.75rem;
+  }
+  .Sandwich,
+  .Cola3 {
+    margin-top: 72px;
   }
 `
 
@@ -105,8 +109,8 @@ const PageSectionBlock = ({ data, pageData }) => {
       isEntireScreen={isEntireScreen}
     >
       {rename ? rename : <h1>{name}</h1>}
-      {data.map((itm) => (
-        <div>
+      {data.map((itm, idx) => (
+        <div className={`${itm.name}${idx}`}>
           <h4>{itm.name}</h4>
           <p>{itm.desc}</p>
         </div>

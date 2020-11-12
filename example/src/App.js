@@ -44,6 +44,7 @@ const App = () => {
         page2: [
           {
             name: 'Garden Salads',
+            size: 'large',
             rename: (
               <h1>
                 Fresh & <br /> Organic <br /> Salads

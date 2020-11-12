@@ -53,7 +53,7 @@ const PageView = ({ data }) => {
     showStatus: false,
     showIndicators: false,
     useKeyboardArrows: true,
-    autoPlay: true,
+    autoPlay: false,
     interval: config.slideDuration ? config.slideDuration : 5000,
     transitionTime: 0,
     infiniteLoop: true,
@@ -73,7 +73,7 @@ const PageView = ({ data }) => {
     <Wrapper>
       <Carousel
         {...configuration}
-        autoPlay={true}
+        autoPlay={false}
         className='page-view-carousel'
       >
         {pages.map((page) => (
