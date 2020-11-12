@@ -11,8 +11,9 @@ import shuffle from './helpers/shuffle'
 
 import TVContext from './TVContext'
 import ListView from './components/ListView'
+import PageView from './components/PageView'
 
-export const TV = ({ gonationID, plID = '1', texture, tvID }) => {
+export const TV = ({ gonationID, plID = '1', texture, tvID, listConfig }) => {
   // todo: convert allItems and menuLoading to be it's own piece of state
   const [allItems, setAllItems] = useState([])
   const [menuLoading, setMenuLoading] = useState(true)
@@ -336,6 +337,11 @@ export const TV = ({ gonationID, plID = '1', texture, tvID }) => {
       ? true
       : false
 
+  const isPageMode = () =>
+    config.config.displayType && config.config.displayType.type === 'page'
+      ? true
+      : false
+
   const decideLoadingOrList = () => {
     if (isListMode() && rawMenuData) {
       return <ListView data={rawMenuData} config={config.config} />
@@ -347,38 +353,56 @@ export const TV = ({ gonationID, plID = '1', texture, tvID }) => {
     <TVContext.Provider
       value={{
         ...config,
+        ...listConfig,
         texture
       }}
     >
-      <CarouselContainer>
-        {!fetchingData() &&
-        !isListMode() &&
-        config.config &&
-        config.config.activeTypes &&
-        config.config.activeTypes.list1 &&
-        allItems.length > 2 ? (
-          <Carousel {...configuration}>{displayTV()}</Carousel>
-        ) : (
-          decideLoadingOrList()
-        )}
-        <PoweredByContainer>
-          <img
-            src='https://www.gonationsites.com/GNSE/gn-sites/images/gn-power-white.svg'
-            alt='GoNation'
-          />
-        </PoweredByContainer>
+      {/* TODO clean up this gross looking JSX (Break into a function or 2?) */}
+      {!fetchingData() &&
+      isPageMode() &&
+      config.config &&
+      config.config.otherOptions ? (
+        <Wrapper texture={texture}>
+          <PageView data={allItems.filter((itm) => itm.item_id)}></PageView>
+        </Wrapper>
+      ) : (
+        <CarouselContainer>
+          {!fetchingData() &&
+          !isListMode() &&
+          config.config &&
+          config.config.activeTypes &&
+          config.config.activeTypes.list1 &&
+          allItems.length > 2 ? (
+            <Carousel {...configuration}>{displayTV()}</Carousel>
+          ) : (
+            decideLoadingOrList()
+          )}
+          <PoweredByContainer>
+            <img
+              src='https://www.gonationsites.com/GNSE/gn-sites/images/gn-power-white.svg'
+              alt='GoNation'
+            />
+          </PoweredByContainer>
 
-        {shout.shoutData.text && config.config.showTicker ? (
-          <ShoutTickerWrapper>
-            <ShoutTicker data={shout.shoutData} />
-          </ShoutTickerWrapper>
-        ) : (
-          ''
-        )}
-      </CarouselContainer>
+          {shout.shoutData.text && config.config.showTicker ? (
+            <ShoutTickerWrapper>
+              <ShoutTicker data={shout.shoutData} />
+            </ShoutTickerWrapper>
+          ) : (
+            ''
+          )}
+        </CarouselContainer>
+      )}
     </TVContext.Provider>
   )
 }
+
+const Wrapper = styled.div`
+  background: ${({ texture }) => `url(${texture})`};
+  background-position: center;
+  background-size: cover;
+  height: 100vh;
+`
 
 const ShoutTickerWrapper = styled.div`
   position: absolute;
