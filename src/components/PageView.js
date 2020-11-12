@@ -53,7 +53,7 @@ const PageView = ({ data }) => {
     showStatus: false,
     showIndicators: false,
     useKeyboardArrows: true,
-    autoPlay: false,
+    autoPlay: true,
     interval: config.slideDuration ? config.slideDuration : 5000,
     transitionTime: 0,
     infiniteLoop: true,
@@ -71,11 +71,7 @@ const PageView = ({ data }) => {
 
   return (
     <Wrapper>
-      <Carousel
-        {...configuration}
-        autoPlay={false}
-        className='page-view-carousel'
-      >
+      <Carousel {...configuration} className='page-view-carousel'>
         {pages.map((page) => (
           <PageViewGrid>{renderGridContent(page)}</PageViewGrid>
         ))}
