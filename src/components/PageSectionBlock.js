@@ -44,16 +44,40 @@ const MenuBlock = styled.div`
     text-transform: uppercase;
     color: ${({ configuration }) => configuration.itemColor};
   }
+  h5 {
+    font-size: 2.5rem;
+    color: ${({ configuration }) => configuration.titleColor};
+    font-weight: bold;
+    margin: 0;
+  }
   p {
     font-size: 1.75rem;
     font-weight: 600;
     margin: 0;
+    line-height: 2.5rem;
+  }
+  .hard-item {
+    margin-bottom: 0.75rem;
   }
 `
 
-const PageSectionBlock = ({ data, area, sectionName, withBorder }) => {
+const PageSectionBlock = ({
+  data,
+  area,
+  sectionName,
+  withBorder,
+  hardData
+}) => {
   const ctx = useContext(TVContext)
-  console.log('PageSectionBlock -> ctx', ctx)
+
+  const renderHardcodedElements = () => (
+    <React.Fragment>
+      <h5>{hardData.title}</h5>
+      {hardData.items.map((itm) => (
+        <p className='hard-item'>{itm}</p>
+      ))}
+    </React.Fragment>
+  )
 
   return (
     <MenuBlock
@@ -68,6 +92,7 @@ const PageSectionBlock = ({ data, area, sectionName, withBorder }) => {
           <p>{itm.desc}</p>
         </div>
       ))}
+      <div>{hardData.items ? renderHardcodedElements() : ''}</div>
     </MenuBlock>
   )
 }

@@ -353,7 +353,9 @@ export const TV = ({ gonationID, plID = '1', texture, tvID, listConfig }) => {
       }}
     >
       {!fetchingData() ? (
-        <PageView data={allItems.filter((itm) => itm.item_id)}></PageView>
+        <Wrapper texture={texture}>
+          <PageView data={allItems.filter((itm) => itm.item_id)}></PageView>
+        </Wrapper>
       ) : (
         ''
       )}
@@ -387,6 +389,13 @@ export const TV = ({ gonationID, plID = '1', texture, tvID, listConfig }) => {
     </TVContext.Provider>
   )
 }
+
+const Wrapper = styled.div`
+  background: ${({ texture }) => `url(${texture})`};
+  background-position: center;
+  background-size: cover;
+  height: 100vh;
+`
 
 const ShoutTickerWrapper = styled.div`
   position: absolute;
