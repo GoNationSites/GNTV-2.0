@@ -357,40 +357,39 @@ export const TV = ({ gonationID, plID = '1', texture, tvID, listConfig }) => {
         texture
       }}
     >
+      {/* TODO clean up this gross looking JSX (Break into a function or 2?) */}
       {!fetchingData() && isPageMode() ? (
         <Wrapper texture={texture}>
           <PageView data={allItems.filter((itm) => itm.item_id)}></PageView>
         </Wrapper>
       ) : (
-        ''
+        <CarouselContainer>
+          {!fetchingData() &&
+          !isListMode() &&
+          config.config &&
+          config.config.activeTypes &&
+          config.config.activeTypes.list1 &&
+          allItems.length > 2 ? (
+            <Carousel {...configuration}>{displayTV()}</Carousel>
+          ) : (
+            decideLoadingOrList()
+          )}
+          <PoweredByContainer>
+            <img
+              src='https://www.gonationsites.com/GNSE/gn-sites/images/gn-power-white.svg'
+              alt='GoNation'
+            />
+          </PoweredByContainer>
+
+          {shout.shoutData.text && config.config.showTicker ? (
+            <ShoutTickerWrapper>
+              <ShoutTicker data={shout.shoutData} />
+            </ShoutTickerWrapper>
+          ) : (
+            ''
+          )}
+        </CarouselContainer>
       )}
-
-      {/* <CarouselContainer>
-        {!fetchingData() &&
-        !isListMode() &&
-        config.config &&
-        config.config.activeTypes &&
-        config.config.activeTypes.list1 &&
-        allItems.length > 2 ? (
-          <Carousel {...configuration}>{displayTV()}</Carousel>
-        ) : (
-          decideLoadingOrList()
-        )}
-        <PoweredByContainer>
-          <img
-            src='https://www.gonationsites.com/GNSE/gn-sites/images/gn-power-white.svg'
-            alt='GoNation'
-          />
-        </PoweredByContainer>
-
-        {shout.shoutData.text && config.config.showTicker ? (
-          <ShoutTickerWrapper>
-            <ShoutTicker data={shout.shoutData} />
-          </ShoutTickerWrapper>
-        ) : (
-          ''
-        )}
-      </CarouselContainer> */}
     </TVContext.Provider>
   )
 }
