@@ -117,7 +117,8 @@ const PageSectionBlock = ({ data, pageData }) => {
       {data.map((itm, idx) => (
         <div className={`${itm.name}${idx}`}>
           <h4>
-            {itm.name} ${itm.variants[0].price}
+            {itm.name}{' '}
+            {itm.section !== 'Beverages' ? itm.variants[0].price : ''}
           </h4>
           <p>{itm.desc}</p>
         </div>
