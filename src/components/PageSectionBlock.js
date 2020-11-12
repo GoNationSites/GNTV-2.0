@@ -4,6 +4,7 @@ import TVContext from '../TVContext'
 
 const MenuBlock = styled.div`
   grid-area: ${({ area }) => area};
+
   display: flex;
   flex-direction: column;
   flex-wrap: wrap;
@@ -13,7 +14,7 @@ const MenuBlock = styled.div`
   border: ${({ withBorder, configuration }) =>
     withBorder ? `5px solid ${configuration.titleColor}` : ''};
   border-radius: 3px;
-  padding: 1.25rem;
+  padding: 1rem;
   text-align: left;
   ${({ isEntireScreen }) =>
     isEntireScreen
@@ -63,11 +64,11 @@ const MenuBlock = styled.div`
   p {
     font-size: 1rem;
     font-weight: 600;
+    max-width: 450px;
   }
   .hard-item {
     margin-bottom: 0.75rem;
   }
-  .Sandwich,
   .Cola3 {
     margin-top: 72px;
   }
@@ -75,6 +76,10 @@ const MenuBlock = styled.div`
 
 const getWidth = (area) => {
   switch (area) {
+    case '1 / 1 / 3 / 2':
+      return '100%'
+    case '1 / 2 / 3 / 3':
+      return '100%'
     case '1 / 1 / 4 / 4':
       return '50%'
     case '1 / 1 / 4 / 4':
@@ -111,7 +116,9 @@ const PageSectionBlock = ({ data, pageData }) => {
       {rename ? rename : <h1>{name}</h1>}
       {data.map((itm, idx) => (
         <div className={`${itm.name}${idx}`}>
-          <h4>{itm.name}</h4>
+          <h4>
+            {itm.name} ${itm.variants[0].price}
+          </h4>
           <p>{itm.desc}</p>
         </div>
       ))}
