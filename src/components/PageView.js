@@ -12,7 +12,7 @@ const PageViewGrid = styled.div`
   grid-template-columns: 1fr 1fr 1fr;
   grid-template-rows: 1fr 1fr 1fr;
   gap: 0px;
-  padding: 4rem;
+  padding: 2rem 2rem 4rem 2rem;
 
   grid-template-areas:
     '. . .'

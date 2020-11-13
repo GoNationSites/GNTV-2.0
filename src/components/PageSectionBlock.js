@@ -49,8 +49,8 @@ const MenuBlock = styled.div`
   > div,
   h1 {
     width: ${({ area }) => getWidth(area)};
-    padding: 0.5rem 1rem;
     box-sizing: border-box;
+    padding: ${({ area }) => getPadding(area)};
   }
   h1 {
     font-size: ${({ isEntireScreen }) => (isEntireScreen ? '8rem' : '3.5rem')};
@@ -61,7 +61,11 @@ const MenuBlock = styled.div`
     text-align: ${({ isEntireScreen }) => (isEntireScreen ? 'center' : 'left')};
   }
   h4 {
-    color: ${({ configuration }) => configuration.itemColor};
+    color: ${({ configuration, darkItemText }) =>
+      darkItemText ? '#000' : configuration.itemColor};
+    text-transform: ${({ lowercaseItems }) =>
+      lowercaseItems ? 'capitalize' : 'uppercase'};
+    ${({ lowercaseItems }) => console.log('lowercase  items: ', lowercaseItems)}
   }
   h5 {
     color: ${({ configuration }) => configuration.titleColor};
@@ -80,6 +84,7 @@ const MenuBlock = styled.div`
 `
 
 const SingleSectionBlock = styled.div`
+  font-family: 'Oswald', sans-serif;
   grid-area: ${({ area }) => area};
   h1,
   h2,
@@ -109,7 +114,6 @@ const SingleSectionBlock = styled.div`
     font-size: ${({ isEntireScreen }) => (isEntireScreen ? '2rem' : '1rem')};
     font-weight: 600;
     max-width: ${({ isEntireScreen }) => (isEntireScreen ? 'none' : '450px')};
-    margin-top: 1.5rem;
   }
   h4,
   h5 {
@@ -134,9 +138,20 @@ const Box = styled.div`
   }
   > div {
     width: 50%;
-    padding: 2rem;
+    padding: 1rem 2rem;
   }
 `
+
+const getPadding = (area) => {
+  switch (area) {
+    case '3 / 1 / 4 / 2':
+      return '4px 0'
+    case '3 / 2 / 4 / 4':
+      return '.5rem 1rem'
+    default:
+      return '.25rem 1rem'
+  }
+}
 
 const getWidth = (area) => {
   switch (area) {
@@ -150,6 +165,10 @@ const getWidth = (area) => {
       return '25%'
     case '3 / 2 / 4 / 4':
       return '24%'
+    case '1 / 3 / 3 / 4':
+      return '100%'
+    case '3 / 1 / 4 / 2':
+      return '100%'
     default:
       return '50%;'
   }
@@ -166,7 +185,7 @@ const PoweredByContainer = styled.div`
   img {
     max-width: 350px;
     margin: auto;
-    padding: 1rem 1rem 0.5rem 1rem;
+    padding: 0rem 1rem 0.5rem 1rem;
     background: rgba(0, 0, 0, 0.5);
     border-top-left-radius: 6px;
     border-top-right-radius: 6px;
@@ -174,7 +193,16 @@ const PoweredByContainer = styled.div`
 `
 
 const PageSectionBlock = ({ data, pageData }) => {
-  const { hardData, area, withBorder, rename, name } = pageData
+  const {
+    hardData,
+    area,
+    withBorder,
+    rename,
+    name,
+    darkItemText,
+    titleTextNormal,
+    lowercaseItems
+  } = pageData
   const ctx = useContext(TVContext)
 
   const isEntireScreen = area === '1 / 1 / 4 / 4'
@@ -221,6 +249,9 @@ const PageSectionBlock = ({ data, pageData }) => {
         configuration={ctx.listConfiguration}
         withBorder={withBorder}
         isEntireScreen={isEntireScreen}
+        darkItemText={darkItemText}
+        titleTextNormal={titleTextNormal}
+        lowercaseItems={lowercaseItems}
       >
         {rename ? rename : <h1>{name}</h1>}
         {data.map((itm, idx) => (

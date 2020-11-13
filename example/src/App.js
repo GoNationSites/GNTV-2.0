@@ -17,31 +17,8 @@ const App = () => {
           }
         ]
       },
-      'Main Menu': {
+      'Pastas and Salads': {
         page1: [
-          {
-            name: 'Sandwiches',
-            area: '1 / 1 / 3 / 2'
-          },
-          {
-            name: 'Picante Tacos',
-            area: '1 / 2 / 3 / 3'
-          },
-          {
-            name: 'Family Menu',
-            area: '1 / 3 / 3 / 4'
-          },
-          {
-            name: 'Sides',
-            area: '3 / 1 / 4 / 2'
-          },
-          {
-            name: 'Beverages',
-            area: '3 / 2 / 4 / 4',
-            withBorder: true
-          }
-        ],
-        page2: [
           {
             name: 'Garden Salads',
             size: 'large',
@@ -73,6 +50,44 @@ const App = () => {
                 'Organic Salmon (4oz) 9.5'
               ]
             }
+          }
+        ]
+      },
+      'Main Menu': {
+        page1: [
+          {
+            name: 'Sandwiches',
+            area: '1 / 1 / 3 / 2'
+          },
+          {
+            name: 'Picante Tacos',
+            rename: (
+              <h1>
+                Picante <br /> Tacos
+              </h1>
+            ),
+            area: '1 / 2 / 3 / 3'
+          },
+          {
+            name: 'Family Menu',
+            area: '1 / 3 / 3 / 4',
+            rename: (
+              <h1>
+                Family <br /> Menu
+              </h1>
+            )
+          },
+          {
+            name: 'Sides',
+            area: '3 / 1 / 4 / 2'
+          },
+          {
+            name: 'Beverages',
+            area: '3 / 2 / 4 / 4',
+            withBorder: true,
+            darkItemText: true,
+            titleTextNormal: true,
+            lowercaseItems: true
           }
         ]
       }
