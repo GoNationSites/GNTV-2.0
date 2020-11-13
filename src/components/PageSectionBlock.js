@@ -87,6 +87,18 @@ const MenuBlock = styled.div`
   }
   .section-desc {
     padding-left: 1rem;
+    ${({ sectionName }) =>
+      sectionName === 'Breakfast' ? 'text-align: center;' : ''}
+  }
+  .Fries3 {
+    padding-top: 4.75rem;
+  }
+  /* .Sides > div {
+    width: 49%;
+  } */
+  > div {
+    ${({ sectionName }) => console.log(sectionName)};
+    ${({ sectionName }) => (sectionName === 'Sides' ? 'width: 49%' : '')};
   }
   /* .Cola3 {
     margin-top: 72px;
@@ -135,6 +147,11 @@ const SingleSectionBlock = styled.div`
   }
   .section-desc {
     padding-left: 1rem;
+  }
+  .section-desc {
+    padding-left: 1rem;
+    ${({ sectionName }) =>
+      sectionName === 'Breakfast' ? 'text-align: center;' : ''}
   }
 `
 
@@ -261,6 +278,8 @@ const PageSectionBlock = ({ data, pageData }) => {
       configuration={ctx.listConfiguration}
       withBorder={withBorder}
       isEntireScreen={isEntireScreen}
+      className={name}
+      sectionName={name}
     >
       {rename ? rename : <h1>{name}</h1>}
       {data.length && data[0].sectionDescription ? (
@@ -297,6 +316,7 @@ const PageSectionBlock = ({ data, pageData }) => {
         titleTextNormal={titleTextNormal}
         lowercaseItems={lowercaseItems}
         sectionName={name}
+        className={name}
       >
         {rename ? rename : <h1>{name}</h1>}
 
