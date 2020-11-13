@@ -38,9 +38,7 @@ const PageView = ({ data }) => {
 
   useEffect(() => {
     potentialPages.forEach((page) => {
-      console.log('listConfiguration is: ', listConfiguration)
       if (config.otherOptions.pageViewData[page] === true) {
-        console.log('setting for : ', page)
         setActiveDataForPageView(page)
       }
     })
