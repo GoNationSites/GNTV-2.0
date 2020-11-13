@@ -22,11 +22,6 @@ const App = () => {
           {
             name: 'Garden Salads',
             size: 'large',
-            rename: (
-              <h1>
-                Fresh & <br /> Organic <br /> Salads
-              </h1>
-            ),
             area: '1 / 1 / 4 / 3',
             withBorder: true,
             hardData: {
