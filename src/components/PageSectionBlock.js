@@ -69,7 +69,7 @@ const MenuBlock = styled.div`
       darkItemText ? '#000' : configuration.itemColor};
     text-transform: ${({ lowercaseItems }) =>
       lowercaseItems ? 'capitalize' : 'uppercase'};
-    max-width: ${({ area }) => (area === '1 / 1 / 4 / 3' ? '425px' : 'none')};
+    max-width: ${({ area }) => (area === '1 / 1 / 4 / 3' ? '525px' : 'none')};
     font-family: 'Oswald', sans-serif;
   }
   h5 {

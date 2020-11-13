@@ -95,7 +95,7 @@ const App = () => {
       plID='1'
       // texture='https://res.cloudinary.com/gonation/image/upload/v1605289336/GNTV/picante-breakfast.jpg'
       gonationID='bzn-4LVvOm-bR2i9TE2wDplhoA'
-      tvID='gntv-GHSkZrPaTq2vGkmL07RskQ'
+      tvID='gntv-btJbal1yTReAUoe9mf8jlA'
     />
   )
 }
