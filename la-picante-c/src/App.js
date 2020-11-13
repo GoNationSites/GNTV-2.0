@@ -97,9 +97,6 @@ const App = () => {
     <TV
       listConfig={{ listConfiguration }}
       texture='https://res.cloudinary.com/gonation/image/upload/v1605023949/GNTV/la-picante-texture.jpg'
-      customTexture={
-        'https://res.cloudinary.com/gonation/image/upload/v1605289336/GNTV/picante-breakfast.jpg'
-      }
       plID='1'
       gonationID='bzn-4LVvOm-bR2i9TE2wDplhoA'
       tvID='gntv-Qk52KxNgSoC01dOPoLBvRQ'

@@ -66,7 +66,7 @@ const MenuBlock = styled.div`
       darkItemText ? '#000' : configuration.itemColor};
     text-transform: ${({ lowercaseItems }) =>
       lowercaseItems ? 'capitalize' : 'uppercase'};
-    max-width: ${({ area }) => (area === '1 / 1 / 4 / 3' ? '250px' : 'none')};
+    max-width: ${({ area }) => (area === '1 / 1 / 4 / 3' ? '275px' : 'none')};
   }
   h5 {
     color: ${({ configuration }) => configuration.titleColor};
