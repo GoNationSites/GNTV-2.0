@@ -239,7 +239,7 @@ const PoweredByContainer = styled.div`
   justify-content: center;
 
   img {
-    max-width: 350px;
+    max-width: 275px;
     margin: auto;
     padding: 0rem 1rem 0.5rem 1rem;
     background: rgba(0, 0, 0, 0.5);
