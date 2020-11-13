@@ -54,7 +54,7 @@ const MenuBlock = styled.div`
     padding: ${({ area }) => getPadding(area)};
   }
   h1 {
-    font-size: ${({ isEntireScreen }) => (isEntireScreen ? '8rem' : '3.5rem')};
+    font-size: ${({ isEntireScreen }) => (isEntireScreen ? '8rem' : '4rem')};
     font-family: 'Playfair Display SC', serif;
     color: ${({ configuration }) => configuration.titleColor};
     line-height: 1;
@@ -83,9 +83,9 @@ const MenuBlock = styled.div`
     margin-bottom: 0.75rem;
     font-family: 'Oswald', sans-serif;
   }
-  .Cola3 {
+  /* .Cola3 {
     margin-top: 72px;
-  }
+  } */
 `
 
 const SingleSectionBlock = styled.div`
@@ -101,7 +101,7 @@ const SingleSectionBlock = styled.div`
     text-align: left;
   }
   h1 {
-    font-size: ${({ isEntireScreen }) => (isEntireScreen ? '8rem' : '3.5rem')};
+    font-size: ${({ isEntireScreen }) => (isEntireScreen ? '8rem' : '4rem')};
     font-family: 'Playfair Display SC', serif;
     color: ${({ configuration }) => configuration.titleColor};
     line-height: 1;

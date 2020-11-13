@@ -70,12 +70,7 @@ const App = () => {
           },
           {
             name: 'Family Menu',
-            area: '1 / 3 / 3 / 4',
-            rename: (
-              <h1>
-                Family <br /> Menu
-              </h1>
-            )
+            area: '1 / 3 / 3 / 4'
           },
           {
             name: 'Sides',
