@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { Carousel } from 'react-responsive-carousel'
 import 'react-responsive-carousel/lib/styles/carousel.min.css'
 import styled from 'styled-components'
+import LS from 'local-storage'
 
 import splitSectionChildren from './helpers/splitSectionChildren'
 import { getData } from './api/request'
@@ -13,7 +14,14 @@ import TVContext from './TVContext'
 import ListView from './components/ListView'
 import PageView from './components/PageView'
 
-export const TV = ({ gonationID, plID = '1', texture, tvID, listConfig }) => {
+export const TV = ({
+  gonationID,
+  plID = '1',
+  texture,
+  tvID,
+  listConfig,
+  customTexture
+}) => {
   // todo: convert allItems and menuLoading to be it's own piece of state
   const [allItems, setAllItems] = useState([])
   const [menuLoading, setMenuLoading] = useState(true)
@@ -34,23 +42,33 @@ export const TV = ({ gonationID, plID = '1', texture, tvID, listConfig }) => {
     loading: true,
     config: {}
   })
-  const [rawMenuData, setRawMenuData] = useState(null)
+  const [rawMenuData, setRawMenuData] = useState([])
+  const [menu, setMenu] = useState([])
   const [gallery, setGallery] = useState({
     loading: true,
     gallery: []
   })
+  const getInitialLocalUpdateTime = () => {
+    if (LS('pricelistLastUpdated')) {
+      return LS('pricelistLastUpdated')
+    } else return null
+  }
+  const [localLastUpdateTime, setLocalLastUpdateTime] = useState(
+    LS('pricelistLastUpdated')
+  )
+
+  console.log('!!', LS('pricelistLastUpdated'))
 
   const isDev = false
   const baseURL = 'https://data.prod.gonation.com'
 
+  const menuURL = `${baseURL}/pl/get?profile_id=${gonationID}&powerlistId=powered-list-${plID}`
+  const eventsURL = `${baseURL}/profile/events?profile_id=${gonationID}`
+  const recurringEventsURL = `${baseURL}/profile/recurringevents?profile_id=${gonationID}`
+  const shoutURL = `${baseURL}/profile/shoutsnew/${gonationID}`
+  const configurationURL = `${baseURL}/profile/gntv/${tvID}?profile_id=${gonationID}`
+  const galleryURL = `${baseURL}/profile/gallery?profile_id=${gonationID}`
   useEffect(() => {
-    const menuURL = `${baseURL}/pl/get?profile_id=${gonationID}&powerlistId=powered-list-${plID}`
-    const eventsURL = `${baseURL}/profile/events?profile_id=${gonationID}`
-    const recurringEventsURL = `${baseURL}/profile/recurringevents?profile_id=${gonationID}`
-    const shoutURL = `${baseURL}/profile/shoutsnew/${gonationID}`
-    const configurationURL = `${baseURL}/profile/gntv/${tvID}?profile_id=${gonationID}`
-    const galleryURL = `${baseURL}/profile/gallery?profile_id=${gonationID}`
-
     // todo: refactor the separate requests into 1 Promise.All
 
     // fetch gallery data
@@ -147,9 +165,12 @@ export const TV = ({ gonationID, plID = '1', texture, tvID, listConfig }) => {
     getData(
       menuURL,
       (res) => {
-        console.log('making req for menu', res)
+        console.log('req is: ', res.data[0])
+        flattenItemsNoSet(res.data[0])
         flattenItems(res.data[0])
-        setRawMenuData(res.data[0])
+        setMenu(res.data[0])
+
+        // setRawMenuData(res.data[0])
 
         setMenuLoading(false)
       },
@@ -159,6 +180,50 @@ export const TV = ({ gonationID, plID = '1', texture, tvID, listConfig }) => {
       }
     )
   }, [])
+
+  const flattenItemsNoSet = (data, nested, idx) => {
+    console.log('data recieved: ', data)
+    const items = data.inventory
+      .filter((itm) => {
+        console.log(itm)
+        return itm.item
+      })
+      .map(({ item }) => {
+        console.log(item)
+        return {
+          ...item,
+          section: data.section.name
+        }
+      })
+
+    splitSectionChildren(data).childSections.map((childSection, idx) => {
+      return flattenItemsNoSet(childSection, true, idx)
+    })
+
+    console.log('setting raw with: ', items)
+    setRawMenuData((rawMenuData) => [...rawMenuData, ...items])
+  }
+
+  const fetchMenu = () => {
+    // fetch menu data, and run the flattenItems function
+    getData(
+      menuURL,
+      (res) => {
+        console.log('making req for menu', res)
+        // flattenItems(res.data[0])
+        flattenItemsNoSet(res.data[0])
+        console.log(res.data[0].pricelistLastUpdated)
+        setLocalLastUpdateTime(Date.parse(res.data[0].pricelistLastUpdated))
+        LS('pricelistLastUpdated', Date.parse(res.data[0].pricelistLastUpdated))
+
+        setMenuLoading(false)
+      },
+      (e) => {
+        setMenuLoading(false)
+        console.log('error occurred: ', e)
+      }
+    )
+  }
 
   useEffect(() => {
     if (!regularEvents.loading && !recurringEvents.loading) {
@@ -194,6 +259,54 @@ export const TV = ({ gonationID, plID = '1', texture, tvID, listConfig }) => {
       clearInterval(interval)
     }
   }, [config])
+
+  // Another useEffect for fetching if menu has updated.
+  useEffect(() => {
+    const menuFetchURL = `${baseURL}/profile/newLastPricelistUpdate?profile_id=${gonationID}`
+    function getLastUpdateTime() {
+      getData(
+        menuFetchURL,
+        ({ data }) => {
+          const { pricelistLastUpdated } = data
+          // If last updated time is after what we have in local storage || local storage has no last update time, we fetch for the menu, and update localLastUpdateTime with setLocalLastUpdateTime
+          // Else we do nothing, and continue to fetch last update time.
+
+          console.log(
+            'pricelistLastUpdated: ',
+            pricelistLastUpdated,
+            'localLastUpdate: ',
+            localLastUpdateTime
+          )
+          if (pricelistLastUpdated !== localLastUpdateTime) {
+            // fetchMenu()
+            setLocalLastUpdateTime(pricelistLastUpdated)
+            LS('pricelistLastUpdated', pricelistLastUpdated)
+            console.log(
+              'menu changed..',
+              'setting last local update time to: ',
+              pricelistLastUpdated
+            )
+            location.reload()
+          } else {
+            setLocalLastUpdateTime(pricelistLastUpdated)
+            LS('pricelistLastUpdated', pricelistLastUpdated)
+            console.log('do nothing...')
+          }
+        },
+        (e) => {
+          console.log(e, 'error occurred when fetching last menu update time')
+        }
+      )
+    }
+    // if (config.config.lastUpdatedAt) {
+    //   getLastUpdateTime()
+    // }
+    const interval = setInterval(() => getLastUpdateTime(), 10000)
+
+    return () => {
+      clearInterval(interval)
+    }
+  }, [localLastUpdateTime])
 
   // BEGIN FUNCTIONS
   const formatGalleryData = (albums) =>
@@ -343,8 +456,9 @@ export const TV = ({ gonationID, plID = '1', texture, tvID, listConfig }) => {
       : false
 
   const decideLoadingOrList = () => {
-    if (isListMode() && rawMenuData) {
-      return <ListView data={rawMenuData} config={config.config} />
+    console.log('deciding: ', menu)
+    if (isListMode() && menu) {
+      return <ListView data={menu} config={config.config} />
     }
     return renderLoading()
   }
@@ -354,7 +468,8 @@ export const TV = ({ gonationID, plID = '1', texture, tvID, listConfig }) => {
       value={{
         ...config,
         ...listConfig,
-        texture
+        texture,
+        customTexture
       }}
     >
       {/* TODO clean up this gross looking JSX (Break into a function or 2?) */}
@@ -362,8 +477,19 @@ export const TV = ({ gonationID, plID = '1', texture, tvID, listConfig }) => {
       isPageMode() &&
       config.config &&
       config.config.otherOptions ? (
-        <Wrapper texture={texture}>
-          <PageView data={allItems.filter((itm) => itm.item_id)}></PageView>
+        <Wrapper texture={customTexture ? customTexture : texture}>
+          {rawMenuData.length && (
+            <PageView
+              data={rawMenuData.filter((itm) => itm.item_id)}
+            ></PageView>
+          )}
+          {shout.shoutData.text && config.config.showTicker ? (
+            <ShoutTickerWrapper>
+              <ShoutTicker data={shout.shoutData} />
+            </ShoutTickerWrapper>
+          ) : (
+            ''
+          )}
         </Wrapper>
       ) : (
         <CarouselContainer>

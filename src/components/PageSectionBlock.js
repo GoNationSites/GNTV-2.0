@@ -59,13 +59,14 @@ const MenuBlock = styled.div`
     line-height: 1;
     width: ${({ isEntireScreen }) => (isEntireScreen ? '100%' : 'auto')};
     text-align: ${({ isEntireScreen }) => (isEntireScreen ? 'center' : 'left')};
+    font-weight: bold;
   }
   h4 {
     color: ${({ configuration, darkItemText }) =>
       darkItemText ? '#000' : configuration.itemColor};
     text-transform: ${({ lowercaseItems }) =>
       lowercaseItems ? 'capitalize' : 'uppercase'};
-    ${({ lowercaseItems }) => console.log('lowercase  items: ', lowercaseItems)}
+    max-width: ${({ area }) => (area === '1 / 1 / 4 / 3' ? '250px' : 'none')};
   }
   h5 {
     color: ${({ configuration }) => configuration.titleColor};
@@ -148,6 +149,8 @@ const getPadding = (area) => {
       return '4px 0'
     case '3 / 2 / 4 / 4':
       return '.5rem 1rem'
+    case '1 / 1 / 4 / 3':
+      return '1.25rem 1rem'
     default:
       return '.25rem 1rem'
   }
@@ -168,6 +171,8 @@ const getWidth = (area) => {
     case '1 / 3 / 3 / 4':
       return '100%'
     case '3 / 1 / 4 / 2':
+      return '100%'
+    case '1 / 3 / 4 / 4':
       return '100%'
     default:
       return '50%;'
