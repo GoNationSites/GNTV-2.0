@@ -76,7 +76,7 @@ const MenuBlock = styled.div`
     color: ${({ configuration }) => configuration.titleColor};
   }
   p {
-    font-size: ${({ isEntireScreen }) => (isEntireScreen ? '2rem' : '1.25rem')};
+    font-size: ${({ isEntireScreen }) => (isEntireScreen ? '2rem' : '1.5rem')};
     font-weight: 600;
     max-width: ${({ isEntireScreen }) => (isEntireScreen ? 'none' : '450px')};
     font-family: 'Oswald', sans-serif;
@@ -239,10 +239,10 @@ const PoweredByContainer = styled.div`
   justify-content: center;
 
   img {
-    max-width: 275px;
+    max-width: 200px;
     margin: auto;
     padding: 0rem 1rem 0.5rem 1rem;
-    background: rgba(0, 0, 0, 0.5);
+    background: black;
     border-top-left-radius: 6px;
     border-top-right-radius: 6px;
   }
