@@ -44,6 +44,7 @@ const MenuBlock = styled.div`
     font-weight: bold;
     line-height: normal;
     font-size: ${({ isEntireScreen }) => (isEntireScreen ? '4rem' : '1.8rem')};
+    font-family: 'Oswald', sans-serif;
   }
 
   > div,
@@ -67,6 +68,7 @@ const MenuBlock = styled.div`
     text-transform: ${({ lowercaseItems }) =>
       lowercaseItems ? 'capitalize' : 'uppercase'};
     max-width: ${({ area }) => (area === '1 / 1 / 4 / 3' ? '275px' : 'none')};
+    font-family: 'Oswald', sans-serif;
   }
   h5 {
     color: ${({ configuration }) => configuration.titleColor};
@@ -75,9 +77,11 @@ const MenuBlock = styled.div`
     font-size: ${({ isEntireScreen }) => (isEntireScreen ? '2rem' : '1rem')};
     font-weight: 600;
     max-width: ${({ isEntireScreen }) => (isEntireScreen ? 'none' : '450px')};
+    font-family: 'Oswald', sans-serif;
   }
   .hard-item {
     margin-bottom: 0.75rem;
+    font-family: 'Oswald', sans-serif;
   }
   .Cola3 {
     margin-top: 72px;
