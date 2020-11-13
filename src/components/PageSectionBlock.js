@@ -43,7 +43,8 @@ const MenuBlock = styled.div`
   h5 {
     font-weight: bold;
     line-height: normal;
-    font-size: ${({ isEntireScreen }) => (isEntireScreen ? '4rem' : '1.8rem')};
+    font-size: ${({ isEntireScreen, sectionName }) =>
+      isEntireScreen ? '4rem' : getItemFontSize(sectionName)};
     font-family: 'Oswald', sans-serif;
   }
 
@@ -54,7 +55,8 @@ const MenuBlock = styled.div`
     padding: ${({ area }) => getPadding(area)};
   }
   h1 {
-    font-size: ${({ isEntireScreen }) => (isEntireScreen ? '8rem' : '4rem')};
+    font-size: ${({ isEntireScreen, sectionName }) =>
+      isEntireScreen ? '8rem' : getHeadingFontSize(sectionName)};
     font-family: 'Playfair Display SC', serif;
     color: ${({ configuration }) => configuration.titleColor};
     line-height: 1;
@@ -67,14 +69,14 @@ const MenuBlock = styled.div`
       darkItemText ? '#000' : configuration.itemColor};
     text-transform: ${({ lowercaseItems }) =>
       lowercaseItems ? 'capitalize' : 'uppercase'};
-    max-width: ${({ area }) => (area === '1 / 1 / 4 / 3' ? '275px' : 'none')};
+    max-width: ${({ area }) => (area === '1 / 1 / 4 / 3' ? '425px' : 'none')};
     font-family: 'Oswald', sans-serif;
   }
   h5 {
     color: ${({ configuration }) => configuration.titleColor};
   }
   p {
-    font-size: ${({ isEntireScreen }) => (isEntireScreen ? '2rem' : '1rem')};
+    font-size: ${({ isEntireScreen }) => (isEntireScreen ? '2rem' : '1.25rem')};
     font-weight: 600;
     max-width: ${({ isEntireScreen }) => (isEntireScreen ? 'none' : '450px')};
     font-family: 'Oswald', sans-serif;
@@ -82,6 +84,9 @@ const MenuBlock = styled.div`
   .hard-item {
     margin-bottom: 0.75rem;
     font-family: 'Oswald', sans-serif;
+  }
+  .section-desc {
+    padding-left: 1rem;
   }
   /* .Cola3 {
     margin-top: 72px;
@@ -116,7 +121,7 @@ const SingleSectionBlock = styled.div`
     color: ${({ configuration }) => configuration.titleColor};
   }
   p {
-    font-size: ${({ isEntireScreen }) => (isEntireScreen ? '2rem' : '1rem')};
+    font-size: ${({ isEntireScreen }) => (isEntireScreen ? '2rem' : '1.5rem')};
     font-weight: 600;
     max-width: ${({ isEntireScreen }) => (isEntireScreen ? 'none' : '450px')};
   }
@@ -127,6 +132,9 @@ const SingleSectionBlock = styled.div`
     line-height: normal;
     font-size: ${({ isEntireScreen }) => (isEntireScreen ? '3rem' : '1.8rem')};
     margin: 0;
+  }
+  .section-desc {
+    padding-left: 1rem;
   }
 `
 
@@ -146,6 +154,28 @@ const Box = styled.div`
     padding: 1rem 2rem;
   }
 `
+
+const getItemFontSize = (name) => {
+  switch (name) {
+    case 'Garden Salads':
+      return '2.2rem;'
+    case 'Pasta':
+      return '2.2rem'
+    default:
+      return '1.8rem'
+  }
+}
+
+const getHeadingFontSize = (name) => {
+  switch (name) {
+    case 'Garden Salads':
+      return '4.75rem;'
+    case 'Pasta':
+      return '4.75rem'
+    default:
+      return '4rem'
+  }
+}
 
 const getPadding = (area) => {
   switch (area) {
@@ -233,12 +263,17 @@ const PageSectionBlock = ({ data, pageData }) => {
       isEntireScreen={isEntireScreen}
     >
       {rename ? rename : <h1>{name}</h1>}
+      {data.length && data[0].sectionDescription ? (
+        <p className='section-desc'>{data[0].sectionDescription}</p>
+      ) : (
+        ''
+      )}
+
       <Box>
         {data.map((itm, idx) => (
           <div className={`${itm.name}${idx}`}>
             <h4>
-              {itm.name}{' '}
-              {itm.section !== 'Beverages' ? itm.variants[0].price : ''}
+              {itm.name} {itm.variants[0].price}
             </h4>
             {itm.desc ? <p>{itm.desc}</p> : ''}
           </div>
@@ -261,13 +296,20 @@ const PageSectionBlock = ({ data, pageData }) => {
         darkItemText={darkItemText}
         titleTextNormal={titleTextNormal}
         lowercaseItems={lowercaseItems}
+        sectionName={name}
       >
         {rename ? rename : <h1>{name}</h1>}
+
+        {data.length && data[0].sectionDescription ? (
+          <p className='section-desc'>{data[0].sectionDescription}</p>
+        ) : (
+          ''
+        )}
+        {console.log(data)}
         {data.map((itm, idx) => (
           <div className={`${itm.name}${idx}`}>
             <h4>
-              {itm.name}{' '}
-              {itm.section !== 'Beverages' ? itm.variants[0].price : ''}
+              {itm.name} {itm.variants[0].price}
             </h4>
             <p>{itm.desc}</p>
           </div>

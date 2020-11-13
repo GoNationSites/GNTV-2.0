@@ -192,7 +192,8 @@ export const TV = ({
         console.log(item)
         return {
           ...item,
-          section: data.section.name
+          section: data.section.name,
+          sectionDescription: data.section.desc
         }
       })
 
