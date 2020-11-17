@@ -22,8 +22,8 @@ const App = () => {
           {
             name: 'Garden Salads',
             size: 'large',
-            area: '1 / 1 / 4 / 3',
-            withBorder: true,
+            area: '1 / 1 / 3 / 3',
+
             hardData: {
               title: 'Add:',
               items: [
@@ -45,6 +45,14 @@ const App = () => {
                 'Organic Salmon (4oz) 9.5'
               ]
             }
+          },
+          {
+            name: 'Beverages',
+            area: '3 / 1 / 4 / 3',
+            withBorder: true,
+            darkItemText: true,
+            titleTextNormal: true,
+            lowercaseItems: true
           }
         ]
       },
@@ -52,7 +60,7 @@ const App = () => {
         page1: [
           {
             name: 'Sandwiches',
-            area: '1 / 1 / 3 / 2'
+            area: '1 / 1 / 4 / 2'
           },
           {
             name: 'Picante Tacos',
@@ -61,7 +69,7 @@ const App = () => {
                 Picante <br /> Tacos
               </h1>
             ),
-            area: '1 / 2 / 3 / 3'
+            area: '1 / 2 / 4 / 3'
           },
           {
             name: 'Family Menu',
@@ -69,15 +77,7 @@ const App = () => {
           },
           {
             name: 'Sides',
-            area: '3 / 1 / 4 / 2'
-          },
-          {
-            name: 'Beverages',
-            area: '3 / 2 / 4 / 4',
-            withBorder: true,
-            darkItemText: true,
-            titleTextNormal: true,
-            lowercaseItems: true
+            area: '3 / 3 / 4 / 4'
           }
         ]
       }

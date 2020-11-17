@@ -4,9 +4,15 @@ import TVContext from '../TVContext'
 
 const MenuBlock = styled.div`
   grid-area: ${({ area }) => area};
-
   display: flex;
   flex-direction: column;
+  ${({ sectionName }) =>
+    sectionName === 'Beverages'
+      ? `
+    flex-direction: row;
+    align-items: center;
+  `
+      : ``}
   flex-wrap: wrap;
   overflow: hidden;
   box-sizing: border-box;
@@ -54,15 +60,20 @@ const MenuBlock = styled.div`
     box-sizing: border-box;
     padding: ${({ area }) => getPadding(area)};
   }
+  > div {
+    ${({ sectionName }) => (sectionName === 'Beverages' ? 'width: auto' : '')};
+  }
   h1 {
     font-size: ${({ isEntireScreen, sectionName }) =>
       isEntireScreen ? '8rem' : getHeadingFontSize(sectionName)};
     font-family: 'Playfair Display SC', serif;
     color: ${({ configuration }) => configuration.titleColor};
     line-height: 1;
-    width: ${({ isEntireScreen }) => (isEntireScreen ? '100%' : 'auto')};
+    /* width: ${({ isEntireScreen }) => (isEntireScreen ? '100%' : 'auto')}; */
     text-align: ${({ isEntireScreen }) => (isEntireScreen ? 'center' : 'left')};
     font-weight: bold;
+    width: ${({ sectionName, isEntireScreen }) =>
+      sectionName === 'Beverages' || isEntireScreen ? '100%' : 'auto'};
   }
   h4 {
     color: ${({ configuration, darkItemText }) =>
@@ -78,7 +89,7 @@ const MenuBlock = styled.div`
   p {
     font-size: ${({ isEntireScreen }) => (isEntireScreen ? '2rem' : '1.5rem')};
     font-weight: 600;
-    max-width: ${({ isEntireScreen }) => (isEntireScreen ? 'none' : '450px')};
+    max-width: ${({ isEntireScreen }) => (isEntireScreen ? 'none' : '570px')};
     font-family: 'Oswald', sans-serif;
   }
   .hard-item {
@@ -224,6 +235,10 @@ const getWidth = (area) => {
     case '3 / 1 / 4 / 2':
       return '100%'
     case '1 / 3 / 4 / 4':
+      return '100%'
+    case '1 / 1 / 4 / 2':
+      return '100%'
+    case '1 / 2 / 4 / 3':
       return '100%'
     default:
       return '50%;'
