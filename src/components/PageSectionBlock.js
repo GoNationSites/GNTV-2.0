@@ -100,6 +100,7 @@ const MenuBlock = styled.div`
     padding-left: 1rem;
     ${({ sectionName }) =>
       sectionName === 'Breakfast' ? 'text-align: center;' : ''}
+    white-space: pre-wrap;
   }
   .Fries3 {
     padding-top: 4.75rem;

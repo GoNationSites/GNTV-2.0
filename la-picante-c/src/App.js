@@ -22,29 +22,29 @@ const App = () => {
           {
             name: 'Garden Salads',
             size: 'large',
-            area: '1 / 1 / 3 / 3',
+            area: '1 / 1 / 3 / 3'
 
-            hardData: {
-              title: 'Add:',
-              items: [
-                'Avocado',
-                'Organic chicken',
-                'Gulf Shrimp 6 (3 pieces) or 9( 5 pieces)',
-                'Scottish Salmon (4oz) 9.5'
-              ]
-            }
+            // hardData: {
+            //   title: 'Add:',
+            //   items: [
+            //     'Avocado',
+            //     'Organic chicken',
+            //     'Gulf Shrimp 6 (3 pieces) or 9( 5 pieces)',
+            //     'Scottish Salmon (4oz) 9.5'
+            //   ]
+            // }
           },
           {
             name: 'Pasta',
-            area: '1 / 3 / 4 / 4',
-            hardData: {
-              title: 'Add:',
-              items: [
-                'Organic chicken 5',
-                'Gulf Shrimp 6 (3 pieces) or 9( 5 pieces)',
-                'Organic Salmon (4oz) 9.5'
-              ]
-            }
+            area: '1 / 3 / 4 / 4'
+            // hardData: {
+            //   title: 'Add:',
+            //   items: [
+            //     'Organic chicken 5',
+            //     'Gulf Shrimp 6 (3 pieces) or 9( 5 pieces)',
+            //     'Organic Salmon (4oz) 9.5'
+            //   ]
+            // }
           },
           {
             name: 'Beverages',
