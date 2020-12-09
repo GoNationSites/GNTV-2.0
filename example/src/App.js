@@ -5,14 +5,17 @@ import { TV } from 'gntv-component'
 
 const App = () => {
   const listConfiguration = {
-    titleColor: '#40ADC0',
-    itemColor: '#FC6E06',
-    textColor: '#262626',
+    titleColor: '#fff',
+    itemColor: '#fff',
+    textColor: '#fff',
+    descriptionColor: 'rgba(186, 186, 186)',
+    columns: `1fr 1fr`,
+    displayVariants: true,
     pages: {
       Pizzas: {
         page1: [
           {
-            name: 'Red Artisan Pinsa',
+            name: 'Artisan Pizza',
             area: '1 / 1 / 4 / 4'
           }
         ]
@@ -22,10 +25,11 @@ const App = () => {
   return (
     <TV
       listConfig={{ listConfiguration }}
-      texture='https://res.cloudinary.com/gonation/image/upload/v1606833159/GNTV/RomeTV5.jpg'
-      plID='1'
+      texture='https://res.cloudinary.com/gonation/image/upload/v1606923661/GNTV/RomeTV4.jpg'
+      plID='5'
       gonationID='bzn-Yi5jWTSiR1qvn3_7S2aYsg'
-      tvID='gntv-GHSkZrPaTq2vGkmL07RskQ'
+      tvID='gntv-f0AaWlIlRu_ktuCEr0q89A'
+      wrapperClassName='romanacci-pizza'
     />
   )
 }

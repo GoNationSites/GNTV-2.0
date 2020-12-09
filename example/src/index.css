@@ -1,11 +1,18 @@
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display+SC:wght@400;700&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600&family=Playfair+Display+SC:wght@400;700&display=swap');
+@font-face {
+    font-family: Minion;
+    src: url("./minion.otf") format("opentype");
+}
+
+@font-face {
+    font-family: Minion;
+    font-weight: bold;
+    src: url("./minion.otf") format("opentype");
+}
 
 body {
   margin: 0;
   padding: 0;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans",
-    "Droid Sans", "Helvetica Neue", sans-serif;
+  font-family: Minion;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -17,4 +24,26 @@ code {
 html,
 body {
   overflow: hidden;
+}
+
+
+.romanacci-pizza h1 {
+  font-size: 64px!important;
+  text-align: left!important;
+}
+
+.romanacci-pizza h4 {
+  font-size: 32px!important;
+}
+
+.romanacci-pizza .item-container {
+  padding-left: 0;
+}
+
+.romanacci-pizza .item-container p {
+  font-family: Minion;
+}
+
+.romanacci-pizza .item-box {
+  padding-top: 1rem;
 }

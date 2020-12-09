@@ -9,8 +9,17 @@ const PageViewGrid = styled.div`
   background-repeat: no-repeat;
   height: calc(100vh);
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  grid-template-rows: 1fr 1fr 1fr;
+  ${({ config }) =>
+    config.columns
+      ? `
+      grid-template-columns: ${config.columns};
+    grid-template-rows: 1fr;  
+      `
+      : `
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: 1fr 1fr 1fr;
+  `}
+
   gap: 0px;
   padding: 2rem 2rem 4rem 2rem;
 
@@ -71,7 +80,9 @@ const PageView = ({ data }) => {
     <Wrapper>
       <Carousel {...configuration} className='page-view-carousel'>
         {pages.map((page) => (
-          <PageViewGrid>{renderGridContent(page)}</PageViewGrid>
+          <PageViewGrid config={listConfiguration} className='page-view-grid'>
+            {renderGridContent(page)}
+          </PageViewGrid>
         ))}
       </Carousel>
     </Wrapper>

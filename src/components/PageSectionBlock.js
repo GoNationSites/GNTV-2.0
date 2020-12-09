@@ -148,6 +148,7 @@ const SingleSectionBlock = styled.div`
     font-size: ${({ isEntireScreen }) => (isEntireScreen ? '2rem' : '1.5rem')};
     font-weight: 600;
     max-width: ${({ isEntireScreen }) => (isEntireScreen ? 'none' : '450px')};
+    color: ${({ configuration }) => configuration.descriptionColor};
   }
   h4,
   h5 {
@@ -290,6 +291,7 @@ const PageSectionBlock = ({ data, pageData }) => {
 
   return isEntireScreen ? (
     <SingleSectionBlock
+      className='menu-block'
       area={area}
       configuration={ctx.listConfiguration}
       withBorder={withBorder}
@@ -304,9 +306,9 @@ const PageSectionBlock = ({ data, pageData }) => {
         ''
       )}
 
-      <Box>
+      <Box className='item-box'>
         {data.map((itm, idx) => (
-          <div className={`${itm.name}${idx}`}>
+          <div className={`${itm.name}${idx} item-container`}>
             <h4>
               {itm.name} {itm.variants[0].price}
             </h4>
@@ -324,6 +326,7 @@ const PageSectionBlock = ({ data, pageData }) => {
   ) : (
     <React.Fragment>
       <MenuBlock
+        className='menu-block'
         area={area}
         configuration={ctx.listConfiguration}
         withBorder={withBorder}
@@ -343,7 +346,7 @@ const PageSectionBlock = ({ data, pageData }) => {
         )}
         {console.log(data)}
         {data.map((itm, idx) => (
-          <div className={`${itm.name}${idx}`}>
+          <div className={`${itm.name}${idx} `}>
             <h4>
               {itm.name} {itm.variants[0].price}
             </h4>

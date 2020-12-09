@@ -20,7 +20,8 @@ export const TV = ({
   texture,
   tvID,
   listConfig,
-  customTexture
+  customTexture,
+  wrapperClassName
 }) => {
   // todo: convert allItems and menuLoading to be it's own piece of state
   const [allItems, setAllItems] = useState([])
@@ -478,7 +479,10 @@ export const TV = ({
       isPageMode() &&
       config.config &&
       config.config.otherOptions ? (
-        <Wrapper texture={customTexture ? customTexture : texture}>
+        <Wrapper
+          className={wrapperClassName}
+          texture={customTexture ? customTexture : texture}
+        >
           {rawMenuData.length && (
             <PageView
               data={rawMenuData.filter((itm) => itm.item_id)}
