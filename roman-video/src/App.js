@@ -10,6 +10,12 @@ const App = () => {
     height: '100%',
     objectFit: 'cover'
   }
+
+  const refreshTime = 60 * 60000
+
+  window.setTimeout(function () {
+    window.location.reload()
+  }, refreshTime)
   return (
     <div style={videoContainerStyle}>
       <video style={videoStyle} muted autoPlay loop playsInline>
