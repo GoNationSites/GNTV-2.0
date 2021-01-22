@@ -8,7 +8,7 @@ const App = () => {
     <TV
       // listConfig={{ listConfiguration }}
       texture='https://res.cloudinary.com/gonation/image/upload/v1606923661/GNTV/RomeTV4.jpg'
-      plID='5'
+      plID='3'
       gonationID='bzn-Yi5jWTSiR1qvn3_7S2aYsg'
       tvID='gntv-f0AaWlIlRu_ktuCEr0q89A'
     />
