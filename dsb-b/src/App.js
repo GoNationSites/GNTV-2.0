@@ -1,6 +1,7 @@
 import React from 'react'
 
 import { TV } from 'gntv-component'
+import './App.css'
 import 'gntv-component/dist/index.css'
 
 const App = () => {
