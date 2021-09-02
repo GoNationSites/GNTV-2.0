@@ -2,7 +2,8 @@ import React from 'react'
 
 import { TV } from 'gntv-component'
 import './App.css'
-import 'gntv-component/dist/index.css'
+// import 'gntv-component/dist/index.css'
+// import '../../src/styles.module.css'
 
 const App = () => {
   return (
