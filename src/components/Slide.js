@@ -1,7 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
 
-import cloudinaryOptimize from '../helpers/cloudinaryOptimize'
 import ContentBlock from '../components/contentBlock'
 import FlyerModeEvent from '../components/flyerModeEvent'
 import ShoutSlide from './ShoutSlide'

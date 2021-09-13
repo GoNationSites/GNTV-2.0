@@ -1,7 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
 import Ticker from 'react-ticker'
-import dayjs from 'dayjs'
 
 const ShoutTicker = ({ data }) => {
   const { createdAt, image, text } = data

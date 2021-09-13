@@ -58,8 +58,6 @@ export const TV = ({
     LS('pricelistLastUpdated')
   )
 
-  console.log('!!', LS('pricelistLastUpdated'))
-
   const isDev = false
   const baseURL = 'https://data.prod.gonation.com'
 
@@ -166,7 +164,6 @@ export const TV = ({
     getData(
       menuURL,
       (res) => {
-        console.log('req is: ', res.data[0])
         flattenItemsNoSet(res.data[0])
         flattenItems(res.data[0])
         setMenu(res.data[0])
@@ -183,14 +180,11 @@ export const TV = ({
   }, [])
 
   const flattenItemsNoSet = (data, nested, idx) => {
-    console.log('data recieved: ', data)
     const items = data.inventory
       .filter((itm) => {
-        console.log(itm)
         return itm.item
       })
       .map(({ item }) => {
-        console.log(item)
         return {
           ...item,
           section: data.section.name,
@@ -201,8 +195,6 @@ export const TV = ({
     splitSectionChildren(data).childSections.map((childSection, idx) => {
       return flattenItemsNoSet(childSection, true, idx)
     })
-
-    console.log('setting raw with: ', items)
     setRawMenuData((rawMenuData) => [...rawMenuData, ...items])
   }
 
@@ -211,10 +203,7 @@ export const TV = ({
     getData(
       menuURL,
       (res) => {
-        console.log('making req for menu', res)
-        // flattenItems(res.data[0])
         flattenItemsNoSet(res.data[0])
-        console.log(res.data[0].pricelistLastUpdated)
         setLocalLastUpdateTime(Date.parse(res.data[0].pricelistLastUpdated))
         LS('pricelistLastUpdated', Date.parse(res.data[0].pricelistLastUpdated))
 
@@ -273,26 +262,14 @@ export const TV = ({
           // If last updated time is after what we have in local storage || local storage has no last update time, we fetch for the menu, and update localLastUpdateTime with setLocalLastUpdateTime
           // Else we do nothing, and continue to fetch last update time.
 
-          console.log(
-            'pricelistLastUpdated: ',
-            pricelistLastUpdated,
-            'localLastUpdate: ',
-            localLastUpdateTime
-          )
           if (pricelistLastUpdated !== localLastUpdateTime) {
             // fetchMenu()
             setLocalLastUpdateTime(pricelistLastUpdated)
             LS('pricelistLastUpdated', pricelistLastUpdated)
-            console.log(
-              'menu changed..',
-              'setting last local update time to: ',
-              pricelistLastUpdated
-            )
             location.reload()
           } else {
             setLocalLastUpdateTime(pricelistLastUpdated)
             LS('pricelistLastUpdated', pricelistLastUpdated)
-            console.log('do nothing...')
           }
         },
         (e) => {
@@ -458,7 +435,6 @@ export const TV = ({
       : false
 
   const decideLoadingOrList = () => {
-    console.log('deciding: ', menu)
     if (isListMode() && menu) {
       return <ListView data={menu} config={config.config} />
     }

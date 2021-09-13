@@ -1,7 +1,6 @@
 import React, { useContext } from 'react'
 import styled from 'styled-components'
 
-import cloudinaryOptimize from '../helpers/cloudinaryOptimize'
 import ContentBlock from './contentBlock'
 
 import TVContext from '../TVContext'

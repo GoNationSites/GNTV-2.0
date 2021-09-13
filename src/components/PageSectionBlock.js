@@ -29,7 +29,7 @@ const MenuBlock = styled.div`
     align-items: flex-start;
     // flex-direction: row;
     flex-wrap: wrap;
-    
+
   `
       : ''}
 
@@ -109,7 +109,6 @@ const MenuBlock = styled.div`
     width: 49%;
   } */
   > div {
-    ${({ sectionName }) => console.log(sectionName)};
     ${({ sectionName }) => (sectionName === 'Sides' ? 'width: 49%' : '')};
   }
   /* .Cola3 {
@@ -344,7 +343,6 @@ const PageSectionBlock = ({ data, pageData }) => {
         ) : (
           ''
         )}
-        {console.log(data)}
         {data.map((itm, idx) => (
           <div className={`${itm.name}${idx} `}>
             <h4>

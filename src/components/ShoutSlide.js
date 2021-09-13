@@ -2,7 +2,6 @@ import React, { useContext } from 'react'
 import styled from 'styled-components'
 
 import TVContext from '../TVContext'
-import cloudinaryOptimize from '../helpers/cloudinaryOptimize'
 import ContentBlock from './contentBlock'
 
 const ShoutSlide = ({ data }) => {
