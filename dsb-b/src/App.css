@@ -23,3 +23,13 @@
 #root .bXEehW {
   font-size: 1.8rem !important;
 }
+
+.content-block {
+  background: rgba(0, 86, 125, 0.8) !important;
+}
+
+.content-block p {
+  color: rgb(249, 217, 69);
+  font-size: 2rem;
+  line-height: 1.75;
+}

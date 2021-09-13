@@ -14,7 +14,7 @@ const ContentBlock = ({ item, isEvent, isShout, isDefault }) => {
     if (item.eventDays) {
       const eventDays = Object.keys(item.eventDays)
       return (
-        <p>
+        <p className='recurring-time'>
           <span>Happening Every {formatEventDays(eventDays)}</span> at{' '}
           {dayjs(item.starts).format('h:mm a')}
         </p>
@@ -22,11 +22,11 @@ const ContentBlock = ({ item, isEvent, isShout, isDefault }) => {
     }
     return (
       <React.Fragment>
-        <p>
+        <p className='start-time'>
           <span>Starts:</span>{' '}
           {dayjs(item.starts).format('dddd, MMMM D h:mm A')}{' '}
         </p>
-        <p>
+        <p className='end-time'>
           <span>Ends:</span> {dayjs(item.ends).format('dddd, MMMM D hh:mm A')}
         </p>
       </React.Fragment>
@@ -35,7 +35,7 @@ const ContentBlock = ({ item, isEvent, isShout, isDefault }) => {
 
   const renderShoutedAt = () => {
     return (
-      <p>
+      <p className='shout-time'>
         <span>Shouted </span>
         {dayjs(item.starts).format('dddd, MMMM D h:mm A')}
       </p>
@@ -51,7 +51,7 @@ const ContentBlock = ({ item, isEvent, isShout, isDefault }) => {
       >
         <Title>Recent Shout</Title>
         <Description>{item.text}</Description>
-        <EventTime>{renderShoutedAt()}</EventTime>
+        <EventTime className='content-time'>{renderShoutedAt()}</EventTime>
       </Block>
     )
   }
@@ -60,7 +60,7 @@ const ContentBlock = ({ item, isEvent, isShout, isDefault }) => {
       <Block className='content-block content-block__event' pushRight>
         <Title>{item.name}</Title>
         <Description>{item.description}</Description>
-        <EventTime>{renderEventTime()}</EventTime>
+        <EventTime className='content-time'>{renderEventTime()}</EventTime>
       </Block>
     )
   }
