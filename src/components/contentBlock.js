@@ -44,7 +44,11 @@ const ContentBlock = ({ item, isEvent, isShout, isDefault }) => {
 
   if (isShout) {
     return (
-      <Block isDefault={isDefault} pushRight={isDefault ? false : true}>
+      <Block
+        className='content-block content-block__shout'
+        isDefault={isDefault}
+        pushRight={isDefault ? false : true}
+      >
         <Title>Recent Shout</Title>
         <Description>{item.text}</Description>
         <EventTime>{renderShoutedAt()}</EventTime>
@@ -53,7 +57,7 @@ const ContentBlock = ({ item, isEvent, isShout, isDefault }) => {
   }
   if (isEvent) {
     return (
-      <Block pushRight>
+      <Block className='content-block content-block__event' pushRight>
         <Title>{item.name}</Title>
         <Description>{item.description}</Description>
         <EventTime>{renderEventTime()}</EventTime>
@@ -61,7 +65,7 @@ const ContentBlock = ({ item, isEvent, isShout, isDefault }) => {
     )
   }
   return (
-    <Block>
+    <Block className='content-block content-block__default'>
       <Title>{item.name}</Title>
       <Description>{item.desc}</Description>
       {ctx.config.showPrices ? <Price>{renderPrice()}</Price> : ''}
