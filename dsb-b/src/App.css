@@ -33,3 +33,11 @@
   font-size: 2rem;
   line-height: 1.75;
 }
+
+.recurring-time,
+.start-time,
+.end-time,
+.shout-time {
+  color: white !important;
+  font-size: 1.75rem;
+}
