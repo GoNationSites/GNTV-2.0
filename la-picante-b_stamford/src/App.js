@@ -84,13 +84,23 @@ const App = () => {
     }
   }
   return (
-    <TV
-      listConfig={{ listConfiguration }}
-      texture='https://res.cloudinary.com/gonation/image/upload/v1610746176/GNTV/picante-rig.jpg'
-      plID='1'
-      gonationID='bzn-4LVvOm-bR2i9TE2wDplhoA' // todo replace this with bzn-dbT5XeHARhSYhqEz-HduLA
-      tvID='gntv-btJbal1yTReAUoe9mf8jlA'
-    />
+    <>
+      <TV
+        listConfig={{ listConfiguration }}
+        texture='https://res.cloudinary.com/gonation/image/upload/v1610746176/GNTV/picante-rig.jpg'
+        plID='1'
+        gonationID='bzn-dbT5XeHARhSYhqEz-HduLA' // todo replace this with bzn-dbT5XeHARhSYhqEz-HduLA
+        tvID='gntv-Z4GIJJ1sRnaXRsrBMO8vQw'
+      />
+
+      {/* <TV
+        listConfig={{ listConfiguration }}
+        texture='https://res.cloudinary.com/gonation/image/upload/v1610746176/GNTV/picante-rig.jpg'
+        plID='1'
+        gonationID='bzn-4LVvOm-bR2i9TE2wDplhoA'
+        tvID='gntv-btJbal1yTReAUoe9mf8jlA'
+      /> */}
+    </>
   )
 }
 

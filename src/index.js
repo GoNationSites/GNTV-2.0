@@ -450,6 +450,7 @@ export const TV = ({
         customTexture
       }}
     >
+      {console.log('is page mode', isPageMode())}
       {/* TODO clean up this gross looking JSX (Break into a function or 2?) */}
       {!fetchingData() &&
       isPageMode() &&
