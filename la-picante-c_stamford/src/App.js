@@ -87,7 +87,7 @@ const App = () => {
     <>
       <TV
         listConfig={{ listConfiguration }}
-        texture='https://res.cloudinary.com/gonation/image/upload/v1610746176/GNTV/picante-rig.jpg'
+        texture='https://res.cloudinary.com/gonation/image/upload/v1610124146/GNTV/la-picante-sandwich.jpg'
         plID='1'
         gonationID='bzn-dbT5XeHARhSYhqEz-HduLA' // todo replace this with bzn-dbT5XeHARhSYhqEz-HduLA
         tvID='gntv-hjnvGn_LTauoQhhFhujKWw'
